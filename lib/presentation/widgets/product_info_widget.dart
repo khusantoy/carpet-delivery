@@ -174,7 +174,7 @@ class ProductInfoWidget extends StatelessWidget {
                   "Chilonzor Tumani, 9-mavze, 2-dom, 1-padez, 8-xonadon",
                   style: TextStyle(
                     fontSize: 14.sp,
-                    color: const Color(0xFF76889A),
+                    color: AppColors.locationColor,
                   ),
                   softWrap: true,
                   maxLines: null,
