@@ -1,4 +1,5 @@
-import 'package:carpet_delivery/presentation/screens/delivery/deliveries_screen.dart';
+import 'package:carpet_delivery/presentation/screens/main/main_screen.dart';
+import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -11,14 +12,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ScreenUtilInit(
-      designSize: Size(360, 690),
+    return ScreenUtilInit(
+      designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
       child: MaterialApp(
         title: 'Yetkazib berish',
         debugShowCheckedModeBanner: false,
-        home: DeliveriesScreen(),
+        theme: ThemeData(
+          scaffoldBackgroundColor: AppColors.white,
+          appBarTheme: const AppBarTheme(
+            backgroundColor: AppColors.white,
+          ),
+        ),
+        home: const MainScreen(),
       ),
     );
   }
