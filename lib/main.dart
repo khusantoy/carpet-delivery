@@ -1,4 +1,4 @@
-import 'package:carpet_delivery/presentation/screens/main/main_screen.dart';
+import 'package:carpet_delivery/presentation/screens/login/login_screen.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
             backgroundColor: AppColors.white,
           ),
         ),
-        home: const MainScreen(),
+        home: const LoginScreen(),
       ),
     );
   }
