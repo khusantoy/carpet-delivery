@@ -29,6 +29,8 @@ class CustomTextfield extends StatelessWidget {
     this.errorText,
     this.onChanged,
   }) : super(key: key);
+
+  
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -58,7 +60,7 @@ class CustomTextfield extends StatelessWidget {
 
 OutlineInputBorder _returnBorder([Color? color]) {
   return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(15),
+    borderRadius: BorderRadius.circular(8),
     borderSide: BorderSide(color: color ?? Colors.grey),
   );
 }

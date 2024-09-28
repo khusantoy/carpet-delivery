@@ -77,17 +77,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                   Gap(24.h),
-                  UniversalbuttonWidget(
-                      function: () {
-                        if (formkey.currentState!.validate()) {
-                          formkey.currentState!.save();
-                          setState(() {
-                            _passwordController.clear();
-                            _usernameController.clear();
-                          });
-                        }
-                      },
-                      text: "Kirish"),
+                  UniversalButtonWidget(
+                    function: () {},
+                    child: const Text("Kirish"),
+                  ),
                   Gap(24.h),
                   RichText(
                     text: TextSpan(
@@ -117,68 +110,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                         ),
                       ],
-                    ),
-                  ),
-                  Gap(24.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Expanded(
-                        child: Divider(
-                          thickness: 1,
-                          color: AppColors.locationColor,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          "Google account orqali kirish",
-                          style: TextStyle(
-                            color: AppColors.bottomNavigationLabelColor,
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      const Expanded(
-                        child: Divider(
-                          thickness: 1,
-                          color: AppColors.locationColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Gap(20.h),
-                  InkWell(
-                    onTap: () {},
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 56.h,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(16.r),
-                        color: AppColors.white,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                              width: 24.w,
-                              height: 56.h,
-                              child: Image.asset("assets/icons/google.png")),
-                          Gap(15.w),
-                          Text(
-                            "Google",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.customBlack,
-                              fontSize: 20.sp,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                 ],

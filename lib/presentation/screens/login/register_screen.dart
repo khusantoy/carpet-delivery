@@ -106,8 +106,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                   ),
                   Gap(24.h),
-                  UniversalbuttonWidget(
-                      function: () {}, text: "Ro'yxatdan o'tish"),
+                  UniversalButtonWidget(
+                    function: () {},
+                    child: Text("Ro'yxatdan o'tish"),
+                  ),
                   Gap(24.h),
                   RichText(
                     text: TextSpan(

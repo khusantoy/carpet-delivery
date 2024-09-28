@@ -2,33 +2,30 @@ import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class UniversalbuttonWidget extends StatelessWidget {
-  final Function() function;
-  final String text;
+class UniversalButtonWidget extends StatelessWidget {
+  final VoidCallback function;
+  final Widget child;
 
-  const UniversalbuttonWidget(
-      {super.key, required this.function, required this.text});
+  const UniversalButtonWidget({
+    super.key,
+    required this.function,
+    required this.child,
+  });
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: function,
-      child: Container(
-        alignment: Alignment.center,
-        height: 56.h,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15.r),
-          color: AppColors.customBlack,
+    return SizedBox(
+      width: double.infinity,
+      height: 56.h,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.customBlack,
+          foregroundColor: AppColors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
-        child: Text(
-          text,
-          style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-              fontSize: 16.sp,
-              letterSpacing: 3.sp),
-          textAlign: TextAlign.center,
-        ),
+        onPressed: function,
+        child: child,
       ),
     );
   }
