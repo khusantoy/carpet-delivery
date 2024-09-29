@@ -1,6 +1,5 @@
 import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
 import 'package:carpet_delivery/data/models/auth/login_request.dart';
-import 'package:carpet_delivery/main.dart';
 import 'package:carpet_delivery/presentation/screens/login/register_screen.dart';
 import 'package:carpet_delivery/presentation/widgets/custom_textfield.dart';
 import 'package:carpet_delivery/presentation/widgets/universal_button_widget.dart';
@@ -30,22 +29,21 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20.r),
             child: Form(
               key: formkey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Gap(94),
-                  const Text(
+                  Gap(94.h),
+                  Text(
                     "Tizimga kirish",
                     style: TextStyle(
                         color: AppColors.customBlack,
-                        fontSize: 24,
+                        fontSize: 24.sp,
                         fontWeight: FontWeight.bold),
                   ),
-                  const Gap(80),
-                  Gap(24.h),
+                  Gap(80.h),
                   CustomTextfield(
                     labeltext: "Foydalanuvchi nomini kiriting",
                     controller: _usernameController,
@@ -83,12 +81,34 @@ class _LoginScreenState extends State<LoginScreen> {
                   Gap(24.h),
                   UniversalButtonWidget(
                     function: () {
-                      final request = LoginRequest(
-                          password: _passwordController.text,
-                          username: _usernameController.text);
-                      context
-                          .read<AuthBloc>()
-                          .add(LoginAuthEvent(request: request));
+                      if (formkey.currentState!.validate()) {
+                        final request = LoginRequest(
+                            password: _passwordController.text,
+                            username: _usernameController.text);
+                        context
+                            .read<AuthBloc>()
+                            .add(LoginAuthEvent(request: request));
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text(
+                                "Tizimga kirishda xatolik mavjud!\nIltimos tekshirib qaytadan urinib ko'ring",
+                                style: TextStyle(fontSize: 14.sp),
+                                textAlign: TextAlign.center,
+                              ),
+                              actions: [
+                                UniversalButtonWidget(
+                                    function: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Qayta kirish"))
+                              ],
+                            );
+                          },
+                        );
+                      }
                     },
                     child: const Text("Kirish"),
                   ),
