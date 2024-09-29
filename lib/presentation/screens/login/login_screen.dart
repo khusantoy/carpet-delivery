@@ -1,9 +1,13 @@
+import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
+import 'package:carpet_delivery/data/models/auth/login_request.dart';
+import 'package:carpet_delivery/main.dart';
 import 'package:carpet_delivery/presentation/screens/login/register_screen.dart';
 import 'package:carpet_delivery/presentation/widgets/custom_textfield.dart';
 import 'package:carpet_delivery/presentation/widgets/universal_button_widget.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
@@ -78,7 +82,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   Gap(24.h),
                   UniversalButtonWidget(
-                    function: () {},
+                    function: () {
+                      final request = LoginRequest(
+                          password: _passwordController.text,
+                          username: _usernameController.text);
+                      context
+                          .read<AuthBloc>()
+                          .add(LoginAuthEvent(request: request));
+                    },
                     child: const Text("Kirish"),
                   ),
                   Gap(24.h),
