@@ -32,11 +32,15 @@ class AuthApiService {
     try {
       await _dio.post("/register", data: request.toMap());
     } on DioException catch (e) {
-      print("Register Service Dio Error:$e");
-      rethrow;
-    } catch (e) {
-      print("Register Service Error:$e");
-      rethrow;
+      String errorMessage = '';
+      if (e.response != null) {
+        errorMessage =
+            e.response?.data['message'] ?? 'An unknown error occurred';
+        print("Register Service Dio Error: $errorMessage");
+      } else {
+        print("Register Service Dio Error: ${e.message}");
+      }
+      throw (errorMessage);
     }
   }
 }
