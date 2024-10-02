@@ -3,6 +3,7 @@ import 'package:carpet_delivery/core/dependency/di.dart';
 import 'package:carpet_delivery/data/repositories/auth_repository.dart';
 import 'package:carpet_delivery/presentation/screens/delivery/deliveries_screen.dart';
 import 'package:carpet_delivery/presentation/screens/login/login_screen.dart';
+import 'package:carpet_delivery/presentation/screens/main/main_screen.dart';
 import 'package:carpet_delivery/presentation/screens/splash_screen/splash_screen.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
                   return const LoginScreen();
                 }
                 if (state is AuthorizedAuthState) {
-                  return const DeliveriesScreen();
+                  return const MainScreen();
                 }
                 if (state is UnauthorizedAuthState) {
                   return const LoginScreen();

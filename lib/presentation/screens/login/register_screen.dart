@@ -1,8 +1,12 @@
+import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
+import 'package:carpet_delivery/data/models/auth/register_request.dart';
+import 'package:carpet_delivery/main.dart';
 import 'package:carpet_delivery/presentation/widgets/custom_textfield.dart';
 import 'package:carpet_delivery/presentation/widgets/universal_button_widget.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
@@ -107,7 +111,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   Gap(24.h),
                   UniversalButtonWidget(
-                    function: () {},
+                    function: () {
+                      if (formkey.currentState!.validate()) {
+                        final request = RegisterRequest(
+                            fullname: _userNameController.text,
+                            password: _passwordController.text,
+                            phoneNumber: _phoneController.text,
+                            username: _nickNameController.text);
+                        context
+                            .read<AuthBloc>()
+                            .add(RegisterAuthEvent(request: request));
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text(
+                                "Tizimga kirishda xatolik mavjud!\nIltimos tekshirib qaytadan urinib ko'ring",
+                                style: TextStyle(fontSize: 14.sp),
+                                textAlign: TextAlign.center,
+                              ),
+                              actions: [
+                                UniversalButtonWidget(
+                                    function: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Qayta kirish"))
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    },
                     child: const Text("Ro'yxatdan o'tish"),
                   ),
                   Gap(24.h),
