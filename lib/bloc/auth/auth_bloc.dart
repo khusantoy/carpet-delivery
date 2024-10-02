@@ -20,7 +20,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(LoadingAuthState());
     try {
       await authRepository.register(event.request);
-      emit(AuthorizedAuthState());
+      emit(RegisterAuthState());
     } catch (e) {
       emit(ErrorAuthState(message: e.toString()));
     }

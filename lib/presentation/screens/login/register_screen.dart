@@ -121,6 +121,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         context
                             .read<AuthBloc>()
                             .add(RegisterAuthEvent(request: request));
+                        Navigator.pop(context);
                       } else {
                         showDialog(
                           context: context,

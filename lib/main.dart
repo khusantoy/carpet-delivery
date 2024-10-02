@@ -44,6 +44,10 @@ class MyApp extends StatelessWidget {
               ),
             ),
             home: BlocBuilder<AuthBloc, AuthState>(
+              buildWhen: (previous, current) {
+                return current is! ErrorAuthState &&
+                    current is! LoadingAuthState;
+              },
               builder: (context, state) {
                 print("Salom $state");
                 if (state is InitialAuthState) {
@@ -55,15 +59,8 @@ class MyApp extends StatelessWidget {
                 if (state is AuthorizedAuthState) {
                   return const MainScreen();
                 }
-                if (state is UnauthorizedAuthState) {
+                if (state is RegisterAuthState) {
                   return const LoginScreen();
-                }
-                if (state is ErrorAuthState) {
-                  return Scaffold(
-                    body: Center(
-                      child: Text(state.message),
-                    ),
-                  );
                 }
                 return const Scaffold(
                   body: Center(

@@ -13,17 +13,24 @@ class AuthApiService {
       final response = await _dio.post("/login", data: request.toMap());
       return AuthResponse.fromMap(response.data);
     } on DioException catch (e) {
-      print("Login Service Dio Error:$e");
-      rethrow;
+      String errorMessage = '';
+      if (e.response != null) {
+        errorMessage =
+            e.response?.data['message'] ?? 'An unknown error occurred';
+        print("Login Service Dio Error: $errorMessage");
+      } else {
+        print("Login Service Dio Error: ${e.message}");
+      }
+      throw (errorMessage);
     } catch (e) {
-      print("Login Service Error:$e");
+      print("Login Service Error: $e");
       rethrow;
     }
   }
 
   Future<void> register(RegisterRequest request) async {
     try {
-      final response = await _dio.post("/register", data: request.toMap());
+      await _dio.post("/register", data: request.toMap());
     } on DioException catch (e) {
       print("Register Service Dio Error:$e");
       rethrow;
