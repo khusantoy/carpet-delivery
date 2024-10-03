@@ -1,10 +1,7 @@
-import 'package:carpet_delivery/bloc/user_profile/user_bloc.dart';
-import 'package:carpet_delivery/main.dart';
 import 'package:carpet_delivery/presentation/screens/delivery/deliveries_screen.dart';
 import 'package:carpet_delivery/presentation/screens/profile/profile_screen.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

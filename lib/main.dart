@@ -2,13 +2,8 @@ import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
 import 'package:carpet_delivery/bloc/user_profile/user_bloc.dart';
 import 'package:carpet_delivery/core/dependency/di.dart';
 import 'package:carpet_delivery/data/repositories/auth_repository.dart';
-<<<<<<< HEAD
 import 'package:carpet_delivery/data/repositories/user_repository.dart';
-import 'package:carpet_delivery/presentation/screens/delivery/deliveries_screen.dart';
-import 'package:carpet_delivery/presentation/screens/login/login_screen.dart';
-=======
 import 'package:carpet_delivery/presentation/screens/auth/login_screen.dart';
->>>>>>> 92d1a00ff8c0e866dee1adf2ef75032663bf5dd3
 import 'package:carpet_delivery/presentation/screens/main/main_screen.dart';
 import 'package:carpet_delivery/presentation/screens/splash_screen/splash_screen.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';

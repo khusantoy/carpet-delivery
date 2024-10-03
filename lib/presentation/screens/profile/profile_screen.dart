@@ -1,5 +1,6 @@
+import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
 import 'package:carpet_delivery/bloc/user_profile/user_bloc.dart';
-import 'package:carpet_delivery/data/models/user/user.dart';
+import 'package:carpet_delivery/data/models/auth/login_request.dart';
 import 'package:carpet_delivery/presentation/widgets/custom_textfield.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,7 +27,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("Salom ");
     return Scaffold(
       appBar: AppBar(
         title: const Text("Profil"),
@@ -34,11 +34,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           PopupMenuButton<String>(
             onSelected: (String value) {
               if (value == 'logout') {
-<<<<<<< HEAD
-                _showLogoutDialog(context);
-              } else if (value == 'edit_profile') {
-                _showEditProfileDialog(context);
-=======
                 showDialog(
                   context: context,
                   builder: (context) {
@@ -82,11 +77,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   builder: (context) {
                     return AlertDialog(
                       title: Form(
-                        key: formkey,
+                        key: formKey,
                         child: Column(
                           children: [
                             CustomTextfield(
-                              controller: _usernameController,
+                              controller: _username,
                               hintText: "Foydalanuvchi ismi kiritilsin",
                               validator: (value) {
                                 if (value == null || value.trim().isEmpty) {
@@ -97,7 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             const Gap(10),
                             CustomTextfield(
-                              controller: _phoneController,
+                              controller: _phoneNumber,
                               maxlength: 9,
                               textInputType: TextInputType.phone,
                               labeltext: "Telefon raqam kiriting",
@@ -132,10 +127,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             backgroundColor: AppColors.customBlack,
                           ),
                           onPressed: () {
-                            if (formkey.currentState!.validate()) {
+                            if (formKey.currentState!.validate()) {
                               final request = LoginRequest(
-                                password: _phoneController.text,
-                                username: _usernameController.text,
+                                password: _phoneNumber.text,
+                                username: _username.text,
                               );
                               context
                                   .read<AuthBloc>()
@@ -151,7 +146,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     );
                   },
                 );
->>>>>>> 92d1a00ff8c0e866dee1adf2ef75032663bf5dd3
               }
             },
             itemBuilder: (BuildContext context) {
@@ -307,41 +301,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
           ),
-<<<<<<< HEAD
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text("Yopish"),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.customBlack),
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  formKey.currentState!.save();
-                  final request = User(
-                      id: _id.text,
-                      fullname: _fullname.text,
-                      username: _username.text,
-                      phoneNumber: _phoneNumber.text,
-                      role: _role.text);
-                  context.read<UserBloc>().add(FetchUserProfileEvent());
-                }
-              },
-              child: const Text(
-                "Ha",
-                style: TextStyle(color: AppColors.white),
-              ),
-            ),
-          ],
         );
       },
-=======
-        ],
-      )),
->>>>>>> 92d1a00ff8c0e866dee1adf2ef75032663bf5dd3
     );
   }
 }
