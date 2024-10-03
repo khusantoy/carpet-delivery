@@ -1,6 +1,8 @@
 import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
+import 'package:carpet_delivery/bloc/user_profile/user_bloc.dart';
 import 'package:carpet_delivery/core/dependency/di.dart';
 import 'package:carpet_delivery/data/repositories/auth_repository.dart';
+import 'package:carpet_delivery/data/repositories/user_repository.dart';
 import 'package:carpet_delivery/presentation/screens/delivery/deliveries_screen.dart';
 import 'package:carpet_delivery/presentation/screens/login/login_screen.dart';
 import 'package:carpet_delivery/presentation/screens/main/main_screen.dart';
@@ -31,6 +33,11 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => AuthBloc(
               authRepository: getIt.get<AuthRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => UserBloc(
+              userRepository: getIt.get<UserRepository>(),
             ),
           )
         ],

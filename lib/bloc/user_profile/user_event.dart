@@ -1,5 +1,7 @@
 part of 'user_bloc.dart';
 
-abstract class UserEvent {}
+abstract class UserProfileEvent {}
 
-class GetUserEvent extends UserEvent {}
+class FetchUserProfileEvent extends UserProfileEvent {
+ 
+}

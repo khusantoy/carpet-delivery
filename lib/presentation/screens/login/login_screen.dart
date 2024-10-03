@@ -1,7 +1,5 @@
 import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
-import 'package:carpet_delivery/core/dependency/di.dart';
 import 'package:carpet_delivery/data/models/auth/login_request.dart';
-import 'package:carpet_delivery/data/repositories/auth_repository.dart';
 import 'package:carpet_delivery/presentation/screens/login/register_screen.dart';
 import 'package:carpet_delivery/presentation/widgets/custom_textfield.dart';
 import 'package:carpet_delivery/presentation/widgets/universal_button_widget.dart';
