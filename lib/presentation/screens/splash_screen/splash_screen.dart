@@ -1,6 +1,4 @@
 import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
-import 'package:carpet_delivery/main.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,7 +13,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       context.read<AuthBloc>().add(CheckAuthStatusEvent());
     });
   }
@@ -25,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return const Scaffold(
       body: Center(
         child: FlutterLogo(
-          size: 60,
+          size: 80,
         ),
       ),
     );

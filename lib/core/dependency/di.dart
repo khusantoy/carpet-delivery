@@ -2,6 +2,7 @@ import 'package:carpet_delivery/core/network/dio_client.dart';
 import 'package:carpet_delivery/data/repositories/auth_repository.dart';
 import 'package:carpet_delivery/data/services/auth_api_service.dart';
 import 'package:carpet_delivery/data/services/auth_local_service.dart';
+import 'package:carpet_delivery/data/services/user_profile_api_service.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,6 +17,7 @@ Future<void> dependencyInit() async {
   // Services
   getIt.registerLazySingleton(() => AuthApiService());
   getIt.registerLazySingleton(() => AuthLocalService());
+  getIt.registerLazySingleton(() => UserProfileApiService());
 
   // Repositories
 

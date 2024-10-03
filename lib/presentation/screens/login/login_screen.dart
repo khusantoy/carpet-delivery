@@ -1,6 +1,7 @@
 import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
+import 'package:carpet_delivery/core/dependency/di.dart';
 import 'package:carpet_delivery/data/models/auth/login_request.dart';
-import 'package:carpet_delivery/main.dart';
+import 'package:carpet_delivery/data/repositories/auth_repository.dart';
 import 'package:carpet_delivery/presentation/screens/login/register_screen.dart';
 import 'package:carpet_delivery/presentation/widgets/custom_textfield.dart';
 import 'package:carpet_delivery/presentation/widgets/universal_button_widget.dart';
@@ -26,26 +27,48 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Center(
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is ErrorAuthState) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(
+                  "Login qilishda xatolik bor!\nIltimos tekshirib qaytadan urinib ko'ring",
+                  style: TextStyle(fontSize: 14.sp),
+                  textAlign: TextAlign.center,
+                ),
+                actions: [
+                  UniversalButtonWidget(
+                      function: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text("Qayta kirish"))
+                ],
+              );
+            },
+          );
+        }
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20.r),
             child: Form(
               key: formkey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Gap(94),
-                  const Text(
+                  Gap(94.h),
+                  Text(
                     "Tizimga kirish",
                     style: TextStyle(
                         color: AppColors.customBlack,
-                        fontSize: 24,
+                        fontSize: 24.sp,
                         fontWeight: FontWeight.bold),
                   ),
-                  const Gap(80),
-                  Gap(24.h),
+                  Gap(80.h),
                   CustomTextfield(
                     labeltext: "Foydalanuvchi nomini kiriting",
                     controller: _usernameController,
@@ -80,15 +103,28 @@ class _LoginScreenState extends State<LoginScreen> {
                       return null;
                     },
                   ),
+                  Gap(16.h),
+                  // GestureDetector(
+                  // onTap: () {},
+                  // child: const Text(
+                  //   "Forgot Password?",
+                  //   style:
+                  //       TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+                  //   textAlign: TextAlign.right,
+                  // ),
+                  // ),
                   Gap(24.h),
                   UniversalButtonWidget(
                     function: () {
-                      final request = LoginRequest(
-                          password: _passwordController.text,
-                          username: _usernameController.text);
-                      context
-                          .read<AuthBloc>()
-                          .add(LoginAuthEvent(request: request));
+                      if (formkey.currentState!.validate()) {
+                        formkey.currentState!.save();
+                        final request = LoginRequest(
+                            password: _passwordController.text,
+                            username: _usernameController.text);
+                        context
+                            .read<AuthBloc>()
+                            .add(LoginAuthEvent(request: request));
+                      }
                     },
                     child: const Text("Kirish"),
                   ),

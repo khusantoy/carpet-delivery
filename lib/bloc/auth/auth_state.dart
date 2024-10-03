@@ -15,3 +15,5 @@ final class ErrorAuthState extends AuthState {
 
   ErrorAuthState({required this.message});
 }
+
+class RegisterAuthState extends AuthState {}
