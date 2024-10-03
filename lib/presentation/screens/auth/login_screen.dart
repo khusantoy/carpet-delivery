@@ -95,8 +95,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           if (formkey.currentState!.validate()) {
                             formkey.currentState!.save();
                             final request = LoginRequest(
-                                password: _passwordController.text,
-                                username: _usernameController.text);
+                                password: _passwordController.text.trim(),
+                                username: _usernameController.text.trim());
                             context
                                 .read<AuthBloc>()
                                 .add(LoginAuthEvent(request: request));

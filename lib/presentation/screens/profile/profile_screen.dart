@@ -35,28 +35,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     return AlertDialog(
                       title: Text(
                         "Profildan chiqmoqchimisiz?",
-                        style: TextStyle(fontSize: 14.sp),
-                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16.sp),
                       ),
                       actions: [
                         TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text("Yopish")),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            "Bekor qilish",
+                            style: TextStyle(
+                              color: AppColors.customBlack,
+                            ),
+                          ),
+                        ),
                         ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.customBlack),
-                            onPressed: () {},
-                            child: const Text(
-                              "Ha",
-                              style: TextStyle(color: AppColors.white),
-                            ))
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.customBlack,
+                          ),
+                          onPressed: () {
+                            context.read<AuthBloc>().add(LogoutAuthEvent());
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text(
+                            "Ha",
+                            style: TextStyle(color: AppColors.white),
+                          ),
+                        )
                       ],
                     );
                   },
                 );
-              } else if (value == 'edit_profile') {
+              } else if (value == 'edit') {
                 showDialog(
                   context: context,
                   builder: (context) {
@@ -97,27 +107,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       actions: [
                         TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text("Yopish")),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            "Bekor qilish",
+                            style: TextStyle(
+                              color: AppColors.customBlack,
+                            ),
+                          ),
+                        ),
                         ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.customBlack),
-                            onPressed: () {
-                              if (formkey.currentState!.validate()) {
-                                final request = LoginRequest(
-                                    password: _phoneController.text,
-                                    username: _usernameController.text);
-                                context
-                                    .read<AuthBloc>()
-                                    .add(LoginAuthEvent(request: request));
-                              }
-                            },
-                            child: const Text(
-                              "Ha",
-                              style: TextStyle(color: AppColors.white),
-                            ))
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.customBlack,
+                          ),
+                          onPressed: () {
+                            if (formkey.currentState!.validate()) {
+                              final request = LoginRequest(
+                                password: _phoneController.text,
+                                username: _usernameController.text,
+                              );
+                              context
+                                  .read<AuthBloc>()
+                                  .add(LoginAuthEvent(request: request));
+                            }
+                          },
+                          child: const Text(
+                            "Ha",
+                            style: TextStyle(color: AppColors.white),
+                          ),
+                        )
                       ],
                     );
                   },
@@ -127,23 +146,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
             itemBuilder: (BuildContext context) {
               return [
                 const PopupMenuItem<String>(
-                  value: 'edit_profile',
-                  child: Row(
-                    children: [
-                      Icon(Icons.edit),
-                      SizedBox(width: 8),
-                      Text('Profili tahrirlash'),
-                    ],
+                  value: 'edit',
+                  child: ListTile(
+                    leading: Icon(Icons.edit),
+                    title: Text("Profilni tahrirlash"),
                   ),
                 ),
                 const PopupMenuItem<String>(
                   value: 'logout',
-                  child: Row(
-                    children: [
-                      Icon(Icons.logout),
-                      SizedBox(width: 8),
-                      Text('Profildan chiqish'),
-                    ],
+                  child: ListTile(
+                    leading: Icon(Icons.logout),
+                    title: Text("Chiqish"),
                   ),
                 ),
               ];
@@ -161,7 +174,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               size: 70.r,
             ),
           ),
-          
         ],
       )),
     );
