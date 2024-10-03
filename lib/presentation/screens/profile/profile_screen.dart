@@ -1,13 +1,8 @@
 import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
-import 'package:carpet_delivery/bloc/user_profile/user_bloc.dart';
-import 'package:carpet_delivery/data/models/auth/login_request.dart';
-import 'package:carpet_delivery/presentation/widgets/custom_textfield.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -17,292 +12,160 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final _fullname = TextEditingController();
-  final _id = TextEditingController();
-  final _phoneNumber = TextEditingController();
-  final _role = TextEditingController();
-  final _username = TextEditingController();
-
-  final formKey = GlobalKey<FormState>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Profil"),
-        actions: [
-          PopupMenuButton<String>(
-            onSelected: (String value) {
-              if (value == 'logout') {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text(
-                        "Profildan chiqmoqchimisiz?",
-                        style: TextStyle(fontSize: 16.sp),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text(
-                            "Bekor qilish",
-                            style: TextStyle(
-                              color: AppColors.customBlack,
-                            ),
-                          ),
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.customBlack,
-                          ),
-                          onPressed: () {
-                            context.read<AuthBloc>().add(LogoutAuthEvent());
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text(
-                            "Ha",
-                            style: TextStyle(color: AppColors.white),
-                          ),
-                        )
-                      ],
-                    );
-                  },
-                );
-              } else if (value == 'edit') {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Form(
-                        key: formKey,
-                        child: Column(
-                          children: [
-                            CustomTextfield(
-                              controller: _username,
-                              hintText: "Foydalanuvchi ismi kiritilsin",
-                              validator: (value) {
-                                if (value == null || value.trim().isEmpty) {
-                                  return "Foydalanuvchi  ismi bo'sh bo'lmasligi kerak!";
-                                }
-                                return null;
-                              },
-                            ),
-                            const Gap(10),
-                            CustomTextfield(
-                              controller: _phoneNumber,
-                              maxlength: 9,
-                              textInputType: TextInputType.phone,
-                              labeltext: "Telefon raqam kiriting",
-                              hintText: "(90) 123 45 67",
-                              validator: (value) {
-                                if (value == null || value.trim().isEmpty) {
-                                  return "Telefon raqam bo'sh bo'lmasligi kerak!";
-                                } else if (value.length != 9) {
-                                  return "Parol 9 ta raqamdan kam bo'lmasligi kerak!";
-                                }
-
-                                return null;
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text(
-                            "Bekor qilish",
-                            style: TextStyle(
-                              color: AppColors.customBlack,
-                            ),
-                          ),
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.customBlack,
-                          ),
-                          onPressed: () {
-                            if (formKey.currentState!.validate()) {
-                              final request = LoginRequest(
-                                password: _phoneNumber.text,
-                                username: _username.text,
-                              );
-                              context
-                                  .read<AuthBloc>()
-                                  .add(LoginAuthEvent(request: request));
-                            }
-                          },
-                          child: const Text(
-                            "Ha",
-                            style: TextStyle(color: AppColors.white),
-                          ),
-                        )
-                      ],
-                    );
-                  },
-                );
-              }
-            },
-            itemBuilder: (BuildContext context) {
-              return [
-                const PopupMenuItem<String>(
-                  value: 'edit',
-                  child: ListTile(
-                    leading: Icon(Icons.edit),
-                    title: Text("Profilni tahrirlash"),
-                  ),
-                ),
-                const PopupMenuItem<String>(
-                  value: 'logout',
-                  child: ListTile(
-                    leading: Icon(Icons.logout),
-                    title: Text("Chiqish"),
-                  ),
-                ),
-              ];
-            },
-          ),
-        ],
-      ),
-      body: BlocBuilder<UserBloc, UserState>(
-        bloc: context.read<UserBloc>()..add(FetchUserProfileEvent()),
-        builder: (context, state) {
-          print("============================");
-          print(state);
-          print("============================");
-
-          if (state is LoadingState) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is LoadedState) {
-            print("User profile");
-            final user = state.user;
-            _fullname.text = user.username;
-            _id.text = user.phoneNumber;
-            _phoneNumber.text = user.phoneNumber;
-            _role.text = user.phoneNumber;
-            _username.text = user.phoneNumber;
-
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 50.r,
-                    child: Icon(
-                      CupertinoIcons.person_alt,
-                      size: 70.r,
-                    ),
-                  ),
-                  const Gap(20),
-                  Text(
-                    'Fullname: ${user.fullname}',
-                    style: TextStyle(fontSize: 18.sp),
-                  ),
-                  Text(
-                    'ID: ${user.id}',
-                    style: TextStyle(fontSize: 18.sp),
-                  ),
-                  Text(
-                    'Phone Number: ${user.phoneNumber}',
-                    style: TextStyle(fontSize: 18.sp),
-                  ),
-                  Text(
-                    'Role: ${user.role}',
-                    style: TextStyle(fontSize: 18.sp),
-                  ),
-                  Text(
-                    'Username: ${user.username}',
-                    style: TextStyle(fontSize: 18.sp),
-                  ),
-                ],
-              ),
-            );
-          }
-          return const Center(child: Text('User not found.'));
-        },
-      ),
-    );
-  }
-
-  void _showLogoutDialog(BuildContext context) {
+  void _logout() {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: AppColors.white,
           title: Text(
             "Profildan chiqmoqchimisiz?",
-            style: TextStyle(fontSize: 14.sp),
-            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16.sp),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text("Yopish"),
+              child: const Text(
+                "Bekor qilish",
+                style: TextStyle(
+                  color: AppColors.customBlack,
+                ),
+              ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.customBlack),
-              onPressed: () {},
+                backgroundColor: AppColors.customBlack,
+              ),
+              onPressed: () {
+                context.read<AuthBloc>().add(LogoutAuthEvent());
+                Navigator.of(context).pop();
+              },
               child: const Text(
                 "Ha",
                 style: TextStyle(color: AppColors.white),
               ),
-            ),
+            )
           ],
         );
       },
     );
   }
 
-  void _showEditProfileDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Form(
-            key: formKey,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.scaffoldGrey,
+      appBar: AppBar(
+        title: const Text("Profil"),
+      ),
+      body: Column(
+        children: [
+          SizedBox(
+            height: 8.sp,
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 8.h),
+            color: AppColors.white,
+            child: ListTile(
+              leading: Container(
+                width: 64.w,
+                height: 64.h,
+                decoration: const BoxDecoration(
+                  color: AppColors.avatarBackground,
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    "SI",
+                    style: TextStyle(
+                      fontSize: 24.sp,
+                      color: AppColors.white,
+                    ),
+                  ),
+                ),
+              ),
+              title: Text(
+                "Shakhzod Ismoilov",
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              subtitle: Text(
+                "@shakhzod.ux",
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  color: AppColors.textGrey,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 8.h,
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(
+              vertical: 8.h,
+              horizontal: 20.w,
+            ),
+            width: double.infinity,
+            color: AppColors.white,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                CustomTextfield(
-                  controller: _username,
-                  hintText: "Foydalanuvchi ismi kiritilsin",
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return "Foydalanuvchi ismi bo'sh bo'lmasligi kerak!";
-                    }
-                    return null;
-                  },
+                Text(
+                  "Telefon raqam",
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                const Gap(10),
-                CustomTextfield(
-                  controller: _phoneNumber,
-                  maxlength: 9,
-                  textInputType: TextInputType.phone,
-                  labeltext: "Telefon raqam kiriting",
-                  hintText: "(90) 123 45 67",
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return "Telefon raqam bo'sh bo'lmasligi kerak!";
-                    } else if (value.length != 9) {
-                      return "Telefon raqam 9 ta raqamdan kam bo'lmasligi kerak!";
-                    }
-                    return null;
-                  },
+                SizedBox(
+                  height: 5.h,
+                ),
+                Text(
+                  "+998 99 123 45 67",
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    color: AppColors.textGrey,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ],
             ),
           ),
-        );
-      },
+          SizedBox(
+            height: 10.h,
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(
+              vertical: 8.h,
+              horizontal: 20.w,
+            ),
+            width: double.infinity,
+            color: AppColors.white,
+            child: SizedBox(
+              height: 48,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.customBlack,
+                  foregroundColor: AppColors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                onPressed: () {
+                  _logout();
+                },
+                child: const Text("Chiqish"),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
