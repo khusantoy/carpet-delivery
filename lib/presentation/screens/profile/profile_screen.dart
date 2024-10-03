@@ -1,4 +1,5 @@
 import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
+import 'package:carpet_delivery/bloc/user_profile/user_bloc.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,111 +61,131 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         title: const Text("Profil"),
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 8.sp,
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 8.h),
-            color: AppColors.white,
-            child: ListTile(
-              leading: Container(
-                width: 64.w,
-                height: 64.h,
-                decoration: const BoxDecoration(
-                  color: AppColors.avatarBackground,
-                  shape: BoxShape.circle,
+      body: BlocBuilder<UserBloc, UserState>(
+        bloc: context.read<UserBloc>()..add(FetchUserProfileEvent()),
+        builder: (context, state) {
+          if (state is LoadingState) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (state is ErrorState) {
+            return Center(
+              child: Text(state.message),
+            );
+          }
+
+          if (state is LoadedState) {
+            final user = state.user;
+            return Column(
+              children: [
+                SizedBox(
+                  height: 8.sp,
                 ),
-                child: Center(
-                  child: Text(
-                    "SI",
-                    style: TextStyle(
-                      fontSize: 24.sp,
-                      color: AppColors.white,
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 8.h),
+                  color: AppColors.white,
+                  child: ListTile(
+                    leading: Container(
+                      width: 64.w,
+                      height: 64.h,
+                      decoration: const BoxDecoration(
+                        color: AppColors.avatarBackground,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: Text(
+                          user.fullname[0],
+                          style: TextStyle(
+                            fontSize: 24.sp,
+                            color: AppColors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      user.fullname,
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    subtitle: Text(
+                      "@${user.username}",
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: AppColors.textGrey,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              title: Text(
-                "Shakhzod Ismoilov",
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
+                SizedBox(
+                  height: 8.h,
                 ),
-              ),
-              subtitle: Text(
-                "@shakhzod.ux",
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  color: AppColors.textGrey,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 8.h,
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(
-              vertical: 8.h,
-              horizontal: 20.w,
-            ),
-            width: double.infinity,
-            color: AppColors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "Telefon raqam",
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 8.h,
+                    horizontal: 20.w,
+                  ),
+                  width: double.infinity,
+                  color: AppColors.white,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Telefon raqam",
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      Text(
+                        user.phoneNumber,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: AppColors.textGrey,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(
-                  height: 5.h,
+                  height: 10.h,
                 ),
-                Text(
-                  "+998 99 123 45 67",
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    color: AppColors.textGrey,
-                    fontWeight: FontWeight.w500,
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 8.h,
+                    horizontal: 20.w,
                   ),
-                ),
+                  width: double.infinity,
+                  color: AppColors.white,
+                  child: SizedBox(
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.customBlack,
+                        foregroundColor: AppColors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: () {
+                        _logout();
+                      },
+                      child: const Text("Chiqish"),
+                    ),
+                  ),
+                )
               ],
-            ),
-          ),
-          SizedBox(
-            height: 10.h,
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(
-              vertical: 8.h,
-              horizontal: 20.w,
-            ),
-            width: double.infinity,
-            color: AppColors.white,
-            child: SizedBox(
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.customBlack,
-                  foregroundColor: AppColors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                onPressed: () {
-                  _logout();
-                },
-                child: const Text("Chiqish"),
-              ),
-            ),
-          )
-        ],
+            );
+          }
+          return const SizedBox();
+        },
       ),
     );
   }
