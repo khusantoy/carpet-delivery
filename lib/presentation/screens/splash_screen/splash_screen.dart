@@ -1,6 +1,7 @@
 import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,12 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Image.asset(
-          "assets/images/delivery.png",
-          width: 180,
-        ),
-      ),
+      body: Center(child: Lottie.asset("assets/lottie.json",)),
     );
   }
 }
