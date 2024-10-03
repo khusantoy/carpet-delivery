@@ -37,7 +37,6 @@ class DeliveriesScreen extends StatelessWidget {
           ),
         ),
         body: TabBarView(
-          physics: const NeverScrollableScrollPhysics(),
           children: [
             ListView.separated(
               itemCount: 10,
