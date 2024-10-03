@@ -13,4 +13,6 @@ class AppColors {
   static const Color customBlack = Color(0xFF21252C);
   static const Color bottomNavigationLabelColor = Color(0xFF76889A);
   static const Color locationColor = Color(0xFF76889A);
+  static const Color textGrey = Color(0xFF808080);
+  static const Color avatarBackground = Color(0xFFE2B67E);
 }
