@@ -29,7 +29,7 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
       bottomNavigationBar: SizedBox(
-        height: 60.h,
+        height: 55.h,
         child: BottomNavigationBar(
           backgroundColor: AppColors.customBlack,
           currentIndex: currentIndex,

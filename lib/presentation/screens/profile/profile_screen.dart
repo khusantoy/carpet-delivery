@@ -34,31 +34,140 @@ class _ProfileScreenState extends State<ProfileScreen> {
           PopupMenuButton<String>(
             onSelected: (String value) {
               if (value == 'logout') {
+<<<<<<< HEAD
                 _showLogoutDialog(context);
               } else if (value == 'edit_profile') {
                 _showEditProfileDialog(context);
+=======
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text(
+                        "Profildan chiqmoqchimisiz?",
+                        style: TextStyle(fontSize: 16.sp),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            "Bekor qilish",
+                            style: TextStyle(
+                              color: AppColors.customBlack,
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.customBlack,
+                          ),
+                          onPressed: () {
+                            context.read<AuthBloc>().add(LogoutAuthEvent());
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text(
+                            "Ha",
+                            style: TextStyle(color: AppColors.white),
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                );
+              } else if (value == 'edit') {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Form(
+                        key: formkey,
+                        child: Column(
+                          children: [
+                            CustomTextfield(
+                              controller: _usernameController,
+                              hintText: "Foydalanuvchi ismi kiritilsin",
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return "Foydalanuvchi  ismi bo'sh bo'lmasligi kerak!";
+                                }
+                                return null;
+                              },
+                            ),
+                            const Gap(10),
+                            CustomTextfield(
+                              controller: _phoneController,
+                              maxlength: 9,
+                              textInputType: TextInputType.phone,
+                              labeltext: "Telefon raqam kiriting",
+                              hintText: "(90) 123 45 67",
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return "Telefon raqam bo'sh bo'lmasligi kerak!";
+                                } else if (value.length != 9) {
+                                  return "Parol 9 ta raqamdan kam bo'lmasligi kerak!";
+                                }
+
+                                return null;
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            "Bekor qilish",
+                            style: TextStyle(
+                              color: AppColors.customBlack,
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.customBlack,
+                          ),
+                          onPressed: () {
+                            if (formkey.currentState!.validate()) {
+                              final request = LoginRequest(
+                                password: _phoneController.text,
+                                username: _usernameController.text,
+                              );
+                              context
+                                  .read<AuthBloc>()
+                                  .add(LoginAuthEvent(request: request));
+                            }
+                          },
+                          child: const Text(
+                            "Ha",
+                            style: TextStyle(color: AppColors.white),
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                );
+>>>>>>> 92d1a00ff8c0e866dee1adf2ef75032663bf5dd3
               }
             },
             itemBuilder: (BuildContext context) {
               return [
                 const PopupMenuItem<String>(
-                  value: 'edit_profile',
-                  child: Row(
-                    children: [
-                      Icon(Icons.edit),
-                      SizedBox(width: 8),
-                      Text('Profili tahrirlash'),
-                    ],
+                  value: 'edit',
+                  child: ListTile(
+                    leading: Icon(Icons.edit),
+                    title: Text("Profilni tahrirlash"),
                   ),
                 ),
                 const PopupMenuItem<String>(
                   value: 'logout',
-                  child: Row(
-                    children: [
-                      Icon(Icons.logout),
-                      SizedBox(width: 8),
-                      Text('Profildan chiqish'),
-                    ],
+                  child: ListTile(
+                    leading: Icon(Icons.logout),
+                    title: Text("Chiqish"),
                   ),
                 ),
               ];
@@ -198,6 +307,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
           ),
+<<<<<<< HEAD
           actions: [
             TextButton(
               onPressed: () {
@@ -228,6 +338,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ],
         );
       },
+=======
+        ],
+      )),
+>>>>>>> 92d1a00ff8c0e866dee1adf2ef75032663bf5dd3
     );
   }
 }

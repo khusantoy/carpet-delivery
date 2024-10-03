@@ -13,17 +13,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoginAuthEvent>(_onLogin);
     on<LogoutAuthEvent>(_onLogout);
     on<CheckAuthStatusEvent>(_onCheckAuthStatus);
-    on<RegisterAuthEvent>(_onRegisterAuth);
-  }
-
-  void _onRegisterAuth(RegisterAuthEvent event, emit) async {
-    emit(LoadingAuthState());
-    try {
-      await authRepository.register(event.request);
-      emit(RegisterAuthState());
-    } catch (e) {
-      emit(ErrorAuthState(message: e.toString()));
-    }
   }
 
   void _onLogin(LoginAuthEvent event, emit) async {
@@ -49,11 +38,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _onCheckAuthStatus(CheckAuthStatusEvent event, emit) {
     final AuthLocalService authLocalService = getIt.get<AuthLocalService>();
     final token = authLocalService.getToken();
-    print("------- ${token}");
 
     bool isAuthorized = token == null ? false : true;
 
-    print("authorized: $isAuthorized");
     if (isAuthorized) {
       emit(AuthorizedAuthState());
     } else {
