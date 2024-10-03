@@ -56,9 +56,7 @@ class MyApp extends StatelessWidget {
               if (state is AuthorizedAuthState) {
                 return const MainScreen();
               }
-              if (state is RegisterAuthState) {
-                return const LoginScreen();
-              }
+
               return const Scaffold(
                 body: Center(
                   child: CircularProgressIndicator(),

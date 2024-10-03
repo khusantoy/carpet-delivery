@@ -88,25 +88,35 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                   const Gap(40),
-                  UniversalButtonWidget(
-                    function: () {
-                      if (formkey.currentState!.validate()) {
-                        formkey.currentState!.save();
-                        final request = LoginRequest(
-                            password: _passwordController.text,
-                            username: _usernameController.text);
-                        context
-                            .read<AuthBloc>()
-                            .add(LoginAuthEvent(request: request));
-                      }
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, state) {
+                      return UniversalButtonWidget(
+                        function: () {
+                          if (formkey.currentState!.validate()) {
+                            formkey.currentState!.save();
+                            final request = LoginRequest(
+                                password: _passwordController.text,
+                                username: _usernameController.text);
+                            context
+                                .read<AuthBloc>()
+                                .add(LoginAuthEvent(request: request));
+                          }
+                        },
+                        child: state is LoadingAuthState
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: AppColors.white,
+                                ),
+                              )
+                            : const Text(
+                                "Kirish",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                      );
                     },
-                    child: const Text(
-                      "Kirish",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
                   ),
                 ],
               ),
