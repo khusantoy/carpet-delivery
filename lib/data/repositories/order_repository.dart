@@ -1,3 +1,4 @@
+import 'package:carpet_delivery/data/models/order/order.dart';
 import 'package:carpet_delivery/data/services/order_service.dart';
 
 class OrderRepository {
@@ -5,7 +6,7 @@ class OrderRepository {
 
   OrderRepository({required this.orderService});
 
-  Future<void> getOrder({required int page, required int limit}) async {
-    await orderService.getOrder(page: page, limit: limit);
+  Future<List<Order>> getOrder({required int page, required int limit}) async {
+    return await orderService.getOrder(page: page, limit: limit);
   }
 }

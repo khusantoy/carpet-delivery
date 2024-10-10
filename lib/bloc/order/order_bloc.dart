@@ -18,9 +18,11 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   ) async {
     emit(LoadingOrderState());
     try {
-      await orderRepository.getOrder(page: event.page, limit: event.limit);
+      final orders =
+          await orderRepository.getOrder(page: event.page, limit: event.limit);
+      emit(LoadedOrderState(orders: orders));
     } catch (e) {
-      print("ON GET ORDER EXCEPTION: $e");
+      emit(ErrorOrderState(e.toString()));
     }
   }
 }

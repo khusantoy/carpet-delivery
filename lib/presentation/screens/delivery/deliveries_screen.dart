@@ -10,30 +10,48 @@ class DeliveriesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 3,
       child: Scaffold(
         backgroundColor: AppColors.scaffoldGrey,
         appBar: AppBar(
           title: const Text("Yetkazib berish"),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.assignment_turned_in),
+              ),
+            )
+          ],
           bottom: const TabBar(
             indicatorColor: AppColors.customBlack,
             indicatorWeight: 4,
             labelColor: AppColors.customBlack,
             unselectedLabelColor: AppColors.locationColor,
             isScrollable: true,
-            tabAlignment: TabAlignment.start,
+            tabAlignment: TabAlignment.center,
             tabs: [
               Tab(
-                text: "Barchasi",
+                child: Badge(
+                  offset: Offset(18, -8),
+                  label: Text("10"),
+                  child: Text("Barchasi"),
+                ),
               ),
               Tab(
-                text: "Yetkazilmagan",
+                child: Badge(
+                  offset: Offset(16, -8),
+                  label: Text("10"),
+                  child: Text("Yetkazilmagan"),
+                ),
               ),
               Tab(
-                text: "Yetkazilyapti",
-              ),
-              Tab(
-                text: "Yetkazilgan",
+                child: Badge(
+                  offset: Offset(16, -8),
+                  label: Text("999"),
+                  child: Text("Yetkazilyapti"),
+                ),
               ),
             ],
           ),
@@ -42,94 +60,79 @@ class DeliveriesScreen extends StatelessWidget {
           bloc: context.read<OrderBloc>()
             ..add(GetOrderEvent(page: 1, limit: 10)),
           builder: (context, state) {
-            return TabBarView(
-              children: [
-                ListView.separated(
-                  itemCount: 10,
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      height: 8,
-                    );
-                  },
-                  itemBuilder: (context, index) {
-                    String status = 'delivered';
+            if (state is LoadingOrderState) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-                    if (index.isOdd) {
-                      status = 'delivering';
-                    } else if (index % 5 == 0) {
-                      status = 'ready';
-                    }
+            if (state is ErrorOrderState) {
+              return Center(
+                child: Text(state.message),
+              );
+            }
 
-                    return ProductInfoWidget(
-                      status: status,
-                    );
-                  },
-                ),
-                ListView.separated(
-                  itemCount: 10,
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      height: 8,
-                    );
-                  },
-                  itemBuilder: (context, index) {
-                    String status = 'delivered';
+            if (state is LoadedOrderState) {
+              final orders = state.orders;
 
-                    if (index.isOdd) {
-                      status = 'delivering';
-                    } else if (index % 5 == 0) {
-                      status = 'ready';
-                    }
+              return TabBarView(
+                children: [
+                  ListView.separated(
+                    itemCount: 10,
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(
+                        height: 8,
+                      );
+                    },
+                    itemBuilder: (context, index) {
+                      final order = orders[index];
 
-                    return ProductInfoWidget(
-                      status: status,
-                    );
-                  },
-                ),
-                ListView.separated(
-                  itemCount: 10,
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      height: 8,
-                    );
-                  },
-                  itemBuilder: (context, index) {
-                    String status = 'delivered';
+                      return ProductInfoWidget(
+                        status: order.status,
+                        fullName: order.client.fullName,
+                        phoneNumber: order.client.phoneNumber,
+                      );
+                    },
+                  ),
+                  ListView.separated(
+                    itemCount: 10,
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(
+                        height: 8,
+                      );
+                    },
+                    itemBuilder: (context, index) {
+                      final order = orders[index];
 
-                    if (index.isOdd) {
-                      status = 'delivering';
-                    } else if (index % 5 == 0) {
-                      status = 'ready';
-                    }
+                      return ProductInfoWidget(
+                        status: order.status,
+                        fullName: order.client.fullName,
+                        phoneNumber: order.client.phoneNumber,
+                      );
+                    },
+                  ),
+                  ListView.separated(
+                    itemCount: 10,
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(
+                        height: 8,
+                      );
+                    },
+                    itemBuilder: (context, index) {
+                      final order = orders[index];
 
-                    return ProductInfoWidget(
-                      status: status,
-                    );
-                  },
-                ),
-                ListView.separated(
-                  itemCount: 10,
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      height: 8,
-                    );
-                  },
-                  itemBuilder: (context, index) {
-                    String status = 'delivered';
+                      return ProductInfoWidget(
+                        status: order.status,
+                        fullName: order.client.fullName,
+                        phoneNumber: order.client.phoneNumber,
+                      );
+                    },
+                  ),
+                ],
+              );
+            }
 
-                    if (index.isOdd) {
-                      status = 'delivering';
-                    } else if (index % 5 == 0) {
-                      status = 'ready';
-                    }
-
-                    return ProductInfoWidget(
-                      status: status,
-                    );
-                  },
-                ),
-              ],
-            );
+            return const SizedBox();
           },
         ),
       ),

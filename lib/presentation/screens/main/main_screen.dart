@@ -2,7 +2,6 @@ import 'package:carpet_delivery/presentation/screens/delivery/deliveries_screen.
 import 'package:carpet_delivery/presentation/screens/profile/profile_screen.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MainScreen extends StatefulWidget {
@@ -37,30 +36,22 @@ class _MainScreenState extends State<MainScreen> {
               currentIndex = value;
             });
           },
-          items: [
+          items: const [
             BottomNavigationBarItem(
-              activeIcon: SvgPicture.asset(
-                "assets/icons/shipping_active.svg",
-                width: 24.w,
-                height: 24.h,
+              activeIcon: Icon(
+                Icons.local_shipping_rounded,
+                color: Colors.white,
               ),
-              icon: SvgPicture.asset(
-                "assets/icons/shipping.svg",
-                width: 24.w,
-                height: 24.h,
-              ),
+              icon: Icon(Icons.local_shipping_rounded),
               label: "Yetkazmalar",
             ),
             BottomNavigationBarItem(
-              activeIcon: SvgPicture.asset(
-                "assets/icons/person_active.svg",
-                width: 24.w,
-                height: 24.h,
+              activeIcon: Icon(
+                Icons.person,
+                color: Colors.white,
               ),
-              icon: SvgPicture.asset(
-                "assets/icons/person.svg",
-                width: 24.w,
-                height: 24.h,
+              icon: Icon(
+                Icons.person,
               ),
               label: "Profil",
             )

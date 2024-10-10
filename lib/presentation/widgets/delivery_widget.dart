@@ -6,8 +6,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class ProductInfoWidget extends StatelessWidget {
   final String status;
+  final String fullName;
+  final String phoneNumber;
 
-  const ProductInfoWidget({super.key, required this.status});
+  const ProductInfoWidget({super.key, required this.status, required this.fullName, required this.phoneNumber});
 
   @override
   Widget build(BuildContext context) {

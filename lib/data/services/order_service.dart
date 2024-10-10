@@ -8,18 +8,34 @@ class OrderService {
 
   Future<List<Order>> getOrder({required int page, required int limit}) async {
     try {
-      final response = await _dio.get("/api/courier_orders", queryParameters: {
-        "page": page,
-        "limit": limit,
-      });
-
+      List<dynamic> allOrders = [];
       List<Order> orders = [];
 
-      for (var order in response.data['data']['orders']) {
+      while (true) {
+        final response =
+            await _dio.get("/api/courier_orders", queryParameters: {
+          "page": page,
+          "limit": limit,
+        });
+
+        List<dynamic> orders = response.data['data']['orders'];
+        allOrders.addAll(orders);
+
+        int totalCount = response.data['data']['total_count'];
+
+        int totalPages = (totalCount / limit).ceil();
+
+        if (page >= totalPages) {
+          break;
+        }
+
+        page++;
+      }
+
+      for (var order in allOrders) {
         orders.add(Order.fromJson(order));
       }
 
-      print(orders.length);
       return orders;
     } on DioException catch (e) {
       print("ORDER DIO EXCEPTION: $e");
