@@ -2,12 +2,12 @@ import 'package:carpet_delivery/core/dependency/di.dart';
 import 'package:carpet_delivery/data/services/auth_local_service.dart';
 import 'package:dio/dio.dart';
 
-class DioClient {
+class DioNetwork {
   late final Dio _dio;
 
-  DioClient({required Dio dio}) {
+  DioNetwork({required Dio dio}) {
     _dio = dio;
-    _dio.options.baseUrl = "http://18.194.52.136:8081";
+    _dio.options.baseUrl = "http://18.194.52.136:8080";
     _dio.interceptors.add(NetworkInterceptor());
   }
 

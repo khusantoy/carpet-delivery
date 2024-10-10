@@ -1,10 +1,8 @@
 import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
 import 'package:carpet_delivery/data/models/auth/login_request.dart';
-import 'package:carpet_delivery/presentation/screens/login/register_screen.dart';
 import 'package:carpet_delivery/presentation/widgets/custom_textfield.dart';
 import 'package:carpet_delivery/presentation/widgets/universal_button_widget.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -102,15 +100,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                   Gap(16.h),
-                  // GestureDetector(
-                  // onTap: () {},
-                  // child: const Text(
-                  //   "Forgot Password?",
-                  //   style:
-                  //       TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
-                  //   textAlign: TextAlign.right,
-                  // ),
-                  // ),
                   Gap(24.h),
                   UniversalButtonWidget(
                     function: () {
@@ -127,36 +116,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: const Text("Kirish"),
                   ),
                   Gap(24.h),
-                  RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        color: AppColors.locationColor,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      children: <TextSpan>[
-                        const TextSpan(text: "Ro'yxatdan o'tmaganmisiz? "),
-                        TextSpan(
-                          text: " Ro'yxatdan o'tish",
-                          style: const TextStyle(
-                            decoration: TextDecoration.underline,
-                            decorationStyle: TextDecorationStyle.solid,
-                            color: AppColors.customBlack,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (ctx) => const RegisterScreen(),
-                                ),
-                              );
-                            },
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ),

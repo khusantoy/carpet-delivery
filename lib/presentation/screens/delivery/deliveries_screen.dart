@@ -1,6 +1,8 @@
+import 'package:carpet_delivery/bloc/order/order_bloc.dart';
 import 'package:carpet_delivery/presentation/widgets/delivery_widget.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DeliveriesScreen extends StatelessWidget {
   const DeliveriesScreen({super.key});
@@ -36,93 +38,99 @@ class DeliveriesScreen extends StatelessWidget {
             ],
           ),
         ),
-        body: TabBarView(
-          children: [
-            ListView.separated(
-              itemCount: 10,
-              separatorBuilder: (context, index) {
-                return const SizedBox(
-                  height: 8,
-                );
-              },
-              itemBuilder: (context, index) {
-                String status = 'delivered';
+        body: BlocBuilder(
+          bloc: context.read<OrderBloc>()
+            ..add(GetOrderEvent(page: 1, limit: 10)),
+          builder: (context, state) {
+            return TabBarView(
+              children: [
+                ListView.separated(
+                  itemCount: 10,
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(
+                      height: 8,
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    String status = 'delivered';
 
-                if (index.isOdd) {
-                  status = 'delivering';
-                } else if (index % 5 == 0) {
-                  status = 'ready';
-                }
+                    if (index.isOdd) {
+                      status = 'delivering';
+                    } else if (index % 5 == 0) {
+                      status = 'ready';
+                    }
 
-                return ProductInfoWidget(
-                  status: status,
-                );
-              },
-            ),
-            ListView.separated(
-              itemCount: 10,
-              separatorBuilder: (context, index) {
-                return const SizedBox(
-                  height: 8,
-                );
-              },
-              itemBuilder: (context, index) {
-                String status = 'delivered';
+                    return ProductInfoWidget(
+                      status: status,
+                    );
+                  },
+                ),
+                ListView.separated(
+                  itemCount: 10,
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(
+                      height: 8,
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    String status = 'delivered';
 
-                if (index.isOdd) {
-                  status = 'delivering';
-                } else if (index % 5 == 0) {
-                  status = 'ready';
-                }
+                    if (index.isOdd) {
+                      status = 'delivering';
+                    } else if (index % 5 == 0) {
+                      status = 'ready';
+                    }
 
-                return ProductInfoWidget(
-                  status: status,
-                );
-              },
-            ),
-            ListView.separated(
-              itemCount: 10,
-              separatorBuilder: (context, index) {
-                return const SizedBox(
-                  height: 8,
-                );
-              },
-              itemBuilder: (context, index) {
-                String status = 'delivered';
+                    return ProductInfoWidget(
+                      status: status,
+                    );
+                  },
+                ),
+                ListView.separated(
+                  itemCount: 10,
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(
+                      height: 8,
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    String status = 'delivered';
 
-                if (index.isOdd) {
-                  status = 'delivering';
-                } else if (index % 5 == 0) {
-                  status = 'ready';
-                }
+                    if (index.isOdd) {
+                      status = 'delivering';
+                    } else if (index % 5 == 0) {
+                      status = 'ready';
+                    }
 
-                return ProductInfoWidget(
-                  status: status,
-                );
-              },
-            ),
-            ListView.separated(
-              itemCount: 10,
-              separatorBuilder: (context, index) {
-                return const SizedBox(
-                  height: 8,
-                );
-              },
-              itemBuilder: (context, index) {
-                String status = 'delivered';
+                    return ProductInfoWidget(
+                      status: status,
+                    );
+                  },
+                ),
+                ListView.separated(
+                  itemCount: 10,
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(
+                      height: 8,
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    String status = 'delivered';
 
-                if (index.isOdd) {
-                  status = 'delivering';
-                } else if (index % 5 == 0) {
-                  status = 'ready';
-                }
+                    if (index.isOdd) {
+                      status = 'delivering';
+                    } else if (index % 5 == 0) {
+                      status = 'ready';
+                    }
 
-                return ProductInfoWidget(
-                  status: status,
-                );
-              },
-            ),
-          ],
+                    return ProductInfoWidget(
+                      status: status,
+                    );
+                  },
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
