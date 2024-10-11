@@ -12,8 +12,7 @@ class OrderService {
       List<Order> orders = [];
 
       while (true) {
-        final response =
-            await _dio.get("/api/courier_orders", queryParameters: {
+        final response = await _dio.get("/api/orders", queryParameters: {
           "page": page,
           "limit": limit,
         });

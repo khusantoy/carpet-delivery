@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:carpet_delivery/core/dependency/di.dart';
 import 'package:carpet_delivery/data/models/auth/auth_response.dart';
 import 'package:carpet_delivery/data/services/auth_local_service.dart';
@@ -40,61 +42,45 @@ class NetworkInterceptor extends Interceptor {
 class RefreshTokenInterceptor extends Interceptor {
   final Dio dio;
   bool isRefreshing = false;
+  final _queue = <Map<String, dynamic>>[];
 
   RefreshTokenInterceptor(this.dio);
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (err.response?.statusCode == 401) {
+    if (_shouldRefreshToken(err)) {
       try {
-        final response = await _refreshToken();
-        if (response != null) {
-          return handler.resolve(await _retry(err.requestOptions));
-        } else {
-          // Refresh token response null bo'lsa
-          _handleAuthError(handler, err);
+        final requestOptions = err.requestOptions;
+
+        // Navbatga qo'shish
+        final completer = Completer<Response>();
+        _queue.add({
+          'completer': completer,
+          'options': requestOptions,
+        });
+
+        // Agar refresh jarayoni bo'lmasa, refreshni boshlash
+        if (!isRefreshing) {
+          await _startRefreshToken();
         }
+
+        // Natijani kutish
+        final response = await completer.future;
+        return handler.resolve(response);
       } catch (e) {
-        _handleAuthError(handler, err);
+        return _handleAuthError(handler, err);
       }
-    } else {
-      return handler.next(err);
     }
+    return handler.next(err);
   }
 
-  void _handleAuthError(ErrorInterceptorHandler handler, DioException err) {
-    try {
-      final authLocalService = getIt.get<AuthLocalService>();
-      authLocalService.clearTokens();
-    } catch (e) {
-      print('Error clearing tokens: $e');
-    }
-    handler.next(err);
+  bool _shouldRefreshToken(DioException err) {
+    return err.response?.statusCode == 401 &&
+        !err.requestOptions.path.contains('refresh-token') &&
+        !err.requestOptions.path.contains('login');
   }
 
-  Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {
-    try {
-      final options = Options(
-        method: requestOptions.method,
-        headers: requestOptions.headers,
-      );
-      return await dio.request<dynamic>(
-        requestOptions.path,
-        data: requestOptions.data,
-        queryParameters: requestOptions.queryParameters,
-        options: options,
-      );
-    } catch (e) {
-      throw DioException(
-        requestOptions: requestOptions,
-        error: 'Failed to retry request',
-      );
-    }
-  }
-
-  Future<Response?> _refreshToken() async {
-    if (isRefreshing) return null;
-
+  Future<void> _startRefreshToken() async {
     isRefreshing = true;
     try {
       final authLocalService = getIt.get<AuthLocalService>();
@@ -107,30 +93,30 @@ class RefreshTokenInterceptor extends Interceptor {
         );
       }
 
-      final response = await dio.post(
-        '/refresh-token',
+      final response = await Dio().post(
+        '${dio.options.baseUrl}/auth/refresh-token',
         data: {'refresh_token': refreshToken},
       );
 
       if (response.statusCode == 200 && response.data != null) {
         final data = response.data as Map<String, dynamic>;
-        final newToken = data['access_token'] as String?;
-        final newRefreshToken = data['refresh_token'] as String?;
-
-        if (newToken == null || newRefreshToken == null) {
-          throw DioException(
-            requestOptions: RequestOptions(path: ''),
-            error: 'Invalid token response',
-          );
-        }
-
-        final authResponse =
-            AuthResponse(token: newToken, refreshToken: newRefreshToken);
+        final authResponse = AuthResponse.fromMap(data);
 
         await authLocalService.saveToken(authResponse);
         await authLocalService.saveRefreshToken(authResponse);
 
-        return response;
+        // Navbatdagi so'rovlarni qayta yuborish
+        for (final item in _queue) {
+          final options = item['options'] as RequestOptions;
+          final completer = item['completer'] as Completer<Response>;
+
+          try {
+            final retryResponse = await _retry(options);
+            completer.complete(retryResponse);
+          } catch (e) {
+            completer.completeError(e);
+          }
+        }
       } else {
         throw DioException(
           requestOptions: RequestOptions(path: ''),
@@ -138,9 +124,39 @@ class RefreshTokenInterceptor extends Interceptor {
         );
       }
     } catch (e) {
+      // Navbatdagi barcha so'rovlarga xato qaytarish
+      for (final item in _queue) {
+        final completer = item['completer'] as Completer<Response>;
+        completer.completeError(e);
+      }
       rethrow;
     } finally {
+      _queue.clear();
       isRefreshing = false;
     }
+  }
+
+  void _handleAuthError(ErrorInterceptorHandler handler, DioException err) {
+    try {
+      final authLocalService = getIt.get<AuthLocalService>();
+      authLocalService.clearTokens();
+      // Bu yerda NavigationService orqali login ekraniga yo'naltirish kerak
+    } catch (e) {
+      print('Error clearing tokens: $e');
+    }
+    return handler.next(err);
+  }
+
+  Future<Response> _retry(RequestOptions requestOptions) async {
+    final options = Options(
+      method: requestOptions.method,
+      headers: requestOptions.headers,
+    );
+    return await dio.request<dynamic>(
+      requestOptions.path,
+      data: requestOptions.data,
+      queryParameters: requestOptions.queryParameters,
+      options: options,
+    );
   }
 }
