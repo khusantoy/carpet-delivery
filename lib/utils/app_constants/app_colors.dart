@@ -15,4 +15,5 @@ class AppColors {
   static const Color locationColor = Color(0xFF76889A);
   static const Color textGrey = Color(0xFF808080);
   static const Color avatarBackground = Color(0xFFE2B67E);
+  static const Color addressColor = Color(0xFF332F1E);
 }

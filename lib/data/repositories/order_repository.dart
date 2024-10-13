@@ -7,6 +7,6 @@ class OrderRepository {
   OrderRepository({required this.orderService});
 
   Future<List<Order>> getOrder({required int page, required int limit}) async {
-    return await orderService.getOrder(page: page, limit: limit);
+    return await orderService.getAllOrders(page: page, limit: limit);
   }
 }

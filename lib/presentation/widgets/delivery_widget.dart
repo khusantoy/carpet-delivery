@@ -9,16 +9,18 @@ class ProductInfoWidget extends StatelessWidget {
   final String fullName;
   final String phoneNumber;
 
-  const ProductInfoWidget(
-      {super.key,
-      required this.status,
-      required this.fullName,
-      required this.phoneNumber});
+  const ProductInfoWidget({
+    super.key,
+    required this.status,
+    required this.fullName,
+    required this.phoneNumber,
+  });
 
   @override
   Widget build(BuildContext context) {
+    print(status);
     return Container(
-      padding: const EdgeInsets.all(20.0).w,
+      padding: const EdgeInsets.all(15),
       color: Colors.white,
       child: Column(
         children: [
@@ -33,18 +35,18 @@ class ProductInfoWidget extends StatelessWidget {
                     height: 40.h,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10).w,
-                      color: status == 'delivered'
+                      color: status == 'RECEIVED'
                           ? AppColors.deliveredColorAccent
-                          : status == 'delivering'
+                          : status == 'PREPARING'
                               ? AppColors.deliveringColorAccent
                               : AppColors.readyColorAccent,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0).w,
                       child: SvgPicture.asset(
-                        status == 'delivered'
+                        status == 'RECEIVED'
                             ? "assets/icons/green_package_icon.svg"
-                            : status == 'delivering'
+                            : status == 'PREPARING'
                                 ? "assets/icons/orange_package_icon.svg"
                                 : "assets/icons/red_package_icon.svg",
                       ),
@@ -53,34 +55,32 @@ class ProductInfoWidget extends StatelessWidget {
                   SizedBox(
                     width: 16.w,
                   ),
-                  Text(
-                    "#5R9G87R",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16.sp,
-                      color: const Color(0xFF21252C),
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        phoneNumber,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16.sp,
+                          color: const Color(0xFF21252C),
+                        ),
+                      ),
+                      Text(
+                        fullName,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: AppColors.locationColor,
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     width: 8.w,
                   ),
-                  Container(
-                    width: 4.w,
-                    height: 4.h,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFD2D6DB),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
                   SizedBox(
                     width: 8.w,
-                  ),
-                  Text(
-                    "14 may 2024",
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: const Color(0xFFBABFC5),
-                    ),
                   ),
                 ],
               ),
@@ -151,51 +151,33 @@ class ProductInfoWidget extends StatelessWidget {
               )
             ],
           ),
+          SizedBox(
+            height: 10.h,
+          ),
           Row(
             children: [
-              SizedBox(
-                width: 56.w,
-              ),
               Container(
-                width: 16.w,
-                height: 16.h,
+                width: 40.w,
+                height: 40.h,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.amber),
-                  shape: BoxShape.circle,
+                  borderRadius: BorderRadius.circular(10).w,
+                  color: const Color.fromARGB(255, 238, 244, 255),
                 ),
-                child: Center(
-                  child: Container(
-                    width: 6.w,
-                    height: 6.h,
-                    decoration: const BoxDecoration(
-                      color: Colors.amber,
-                      shape: BoxShape.circle,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0).w,
+                  child: const Center(
+                    child: Icon(
+                      Icons.location_pin,
+                      color: Colors.red,
                     ),
                   ),
                 ),
               ),
               SizedBox(
-                width: 10.w,
-              ),
-              Text(
-                "Manzil",
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: const Color(0xFFBABFC5),
-                ),
-              )
-            ],
-          ),
-          Row(
-            children: [
-              SizedBox(
-                width: 72.w,
+                width: 16.w,
               ),
               SizedBox(
-                width: 10.w,
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width - 122.w,
+                width: MediaQuery.of(context).size.width - 96.w,
                 child: Text(
                   "Chilonzor Tumani, 9-mavze, 2-dom, 1-padez, 8-xonadon",
                   style: TextStyle(
@@ -230,24 +212,24 @@ class ProductInfoWidget extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
                 decoration: BoxDecoration(
-                  color: status == 'delivered'
+                  color: status == 'RECEIVED'
                       ? AppColors.deliveredColorAccent
-                      : status == 'delivering'
+                      : status == 'PREPARING'
                           ? AppColors.deliveringColorAccent
                           : AppColors.readyColorAccent,
                   borderRadius: BorderRadius.circular(8).r,
                 ),
                 child: Text(
-                  status == 'delivered'
+                  status == 'RECEIVED'
                       ? "Yetkazilgan"
-                      : status == 'delivering'
+                      : status == 'PREPARING'
                           ? 'Yetkazilyapti'
                           : 'Yetkazilmagan',
                   style: TextStyle(
                     fontSize: 12.sp,
-                    color: status == 'delivered'
+                    color: status == 'RECEIVED'
                         ? AppColors.deliveredColor
-                        : status == 'delivering'
+                        : status == 'PREPARING'
                             ? AppColors.deliveringColor
                             : AppColors.readyColor,
                   ),

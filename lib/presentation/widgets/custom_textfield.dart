@@ -15,7 +15,7 @@ class CustomTextfield extends StatelessWidget {
   final Function(String)? onChanged;
 
   const CustomTextfield({
-    Key? key,
+    super.key,
     this.hintText,
     this.maxlength,
     this.labeltext,
@@ -28,9 +28,8 @@ class CustomTextfield extends StatelessWidget {
     this.obscureText = false,
     this.errorText,
     this.onChanged,
-  }) : super(key: key);
+  });
 
-  
   @override
   Widget build(BuildContext context) {
     return TextFormField(

@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 class OrderService {
   final _dio = getIt.get<DioNetwork>().dio;
 
-  Future<List<Order>> getOrder({required int page, required int limit}) async {
+  Future<List<Order>> getAllOrders({required int page, required int limit}) async {
     try {
       List<dynamic> allOrders = [];
       List<Order> orders = [];
