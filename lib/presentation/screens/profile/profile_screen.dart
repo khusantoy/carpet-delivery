@@ -80,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             return Column(
               children: [
                 SizedBox(
-                  height: 8.sp,
+                  height: 6.h,
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 8.h),
@@ -120,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 8.h,
+                  height: 6.h,
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(
@@ -155,7 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 10.h,
+                  height: 8.h,
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(

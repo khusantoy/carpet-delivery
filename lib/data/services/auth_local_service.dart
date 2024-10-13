@@ -8,7 +8,7 @@ class AuthLocalService {
 
   final preferance = getIt.get<SharedPreferences>();
 
-  Future<void> saveToken(AuthResponse auth) async {
+  Future<void> saveAccessToken(AuthResponse auth) async {
     await preferance.setString(token, auth.token);
   }
 
@@ -16,7 +16,7 @@ class AuthLocalService {
     await preferance.setString(refreshToken, auth.refreshToken);
   }
 
-  String? getToken() {
+  String? getAccessToken() {
     return preferance.getString(token);
   }
 
@@ -24,12 +24,11 @@ class AuthLocalService {
     return preferance.getString(refreshToken);
   }
 
-  Future<void> deleteToken() async {
+  Future<void> deleteAccessToken() async {
     await preferance.remove(token);
   }
 
-  Future<void> clearTokens() async {
-    await preferance.remove(token);
+  Future<void> deleteRefreshToken() async {
     await preferance.remove(refreshToken);
   }
 }

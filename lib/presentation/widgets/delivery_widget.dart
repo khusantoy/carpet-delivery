@@ -9,7 +9,11 @@ class ProductInfoWidget extends StatelessWidget {
   final String fullName;
   final String phoneNumber;
 
-  const ProductInfoWidget({super.key, required this.status, required this.fullName, required this.phoneNumber});
+  const ProductInfoWidget(
+      {super.key,
+      required this.status,
+      required this.fullName,
+      required this.phoneNumber});
 
   @override
   Widget build(BuildContext context) {
@@ -86,40 +90,60 @@ class ProductInfoWidget extends StatelessWidget {
                 onSelected: (value) {},
                 itemBuilder: (context) {
                   return [
-                    const PopupMenuItem(
-                      child: ListTile(
-                        leading: Icon(
-                          CupertinoIcons.map,
-                          color: AppColors.yandexYellow,
-                        ),
-                        title: Text("Yandex Map orqali ochish"),
+                    PopupMenuItem(
+                      child: Row(
+                        children: [
+                          const Icon(
+                            CupertinoIcons.map,
+                            color: AppColors.yandexYellow,
+                          ),
+                          SizedBox(
+                            width: 6.w,
+                          ),
+                          const Text("Xaritada ko'rish")
+                        ],
                       ),
                     ),
-                    const PopupMenuItem(
-                      child: ListTile(
-                        leading: Icon(
-                          CupertinoIcons.check_mark_circled,
-                          color: AppColors.deliveredColor,
-                        ),
-                        title: Text("Yetkazilgan qilib belgilash"),
+                    PopupMenuItem(
+                      child: Row(
+                        children: [
+                          const Icon(
+                            CupertinoIcons.check_mark_circled,
+                            color: AppColors.deliveredColor,
+                          ),
+                          SizedBox(
+                            width: 6.w,
+                          ),
+                          const Text("Yetkazilgan")
+                        ],
                       ),
                     ),
-                    const PopupMenuItem(
-                      child: ListTile(
-                        leading: Icon(
-                          CupertinoIcons.paperplane,
-                          color: AppColors.deliveringColor,
-                        ),
-                        title: Text("Yetkazilyapti qilib belgilash"),
+                    PopupMenuItem(
+                      child: Row(
+                        children: [
+                          const Icon(
+                            CupertinoIcons.paperplane,
+                            color: AppColors.deliveringColor,
+                          ),
+                          SizedBox(
+                            width: 6.w,
+                          ),
+                          const Text("Yetkazilyapti")
+                        ],
                       ),
                     ),
-                    const PopupMenuItem(
-                      child: ListTile(
-                        leading: Icon(
-                          CupertinoIcons.xmark_circle,
-                          color: AppColors.readyColor,
-                        ),
-                        title: Text("Yetkazilmagan qilib belgilash"),
+                    PopupMenuItem(
+                      child: Row(
+                        children: [
+                          const Icon(
+                            CupertinoIcons.xmark_circle,
+                            color: AppColors.readyColor,
+                          ),
+                          SizedBox(
+                            width: 6.w,
+                          ),
+                          const Text("Yetkazilmagan")
+                        ],
                       ),
                     )
                   ];

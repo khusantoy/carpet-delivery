@@ -11,6 +11,7 @@ class AuthResponse extends Equatable {
       refreshToken: map['refresh_token'],
     );
   }
+
   @override
   List<Object> get props {
     return [token, refreshToken];

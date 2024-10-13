@@ -26,7 +26,6 @@ Future<void> dependencyInit() async {
   getIt.registerLazySingleton(() => OrderService());
 
   // Repositories
-
   getIt.registerSingleton(
     AuthRepository(
       authApiService: getIt.get<AuthApiService>(),

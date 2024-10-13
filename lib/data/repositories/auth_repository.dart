@@ -14,10 +14,12 @@ class AuthRepository {
 
   Future<void> login(LoginRequest request) async {
     final AuthResponse authResponse = await authApiService.login(request);
-    await authLocalService.saveToken(authResponse);
+    await authLocalService.saveAccessToken(authResponse);
+    await authLocalService.saveRefreshToken(authResponse);
   }
 
   Future<void> logout() async {
-    await authLocalService.deleteToken();
+    await authLocalService.deleteAccessToken();
+    await authLocalService.deleteRefreshToken();
   }
 }

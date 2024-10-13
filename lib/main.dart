@@ -53,7 +53,8 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             scaffoldBackgroundColor: AppColors.white,
             appBarTheme: const AppBarTheme(
-              backgroundColor: AppColors.white,
+              backgroundColor: AppColors.customBlack,
+              foregroundColor: AppColors.white,
             ),
           ),
           home: BlocBuilder<AuthBloc, AuthState>(

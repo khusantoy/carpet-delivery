@@ -36,7 +36,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _onCheckAuthStatus(CheckAuthStatusEvent event, emit) {
     final AuthLocalService authLocalService = getIt.get<AuthLocalService>();
-    final token = authLocalService.getToken();
+    final token = authLocalService.getAccessToken();
 
     bool isAuthorized = token == null ? false : true;
 
