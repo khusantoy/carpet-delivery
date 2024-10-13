@@ -23,7 +23,11 @@ class _DeliveriesScreenState extends State<DeliveriesScreen> {
     return Scaffold(
       backgroundColor: AppColors.scaffoldGrey,
       appBar: AppBar(
-        title: const Text("Barchasi"),
+        title: Badge.count(
+          count: 10,
+          alignment: const Alignment(1.4, -1),
+          child: const Text("Barchasi"),
+        ),
         actions: [
           PopupMenuButton<FilterItem>(
             icon: const Icon(Icons.filter_alt),

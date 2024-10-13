@@ -161,7 +161,11 @@ class ProductInfoWidget extends StatelessWidget {
                 height: 40.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10).w,
-                  color: const Color.fromARGB(255, 238, 244, 255),
+                  color: status == 'RECEIVED'
+                      ? AppColors.deliveredColorAccent
+                      : status == 'PREPARING'
+                          ? AppColors.deliveringColorAccent
+                          : AppColors.readyColorAccent,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0).w,
