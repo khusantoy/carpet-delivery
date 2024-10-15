@@ -6,7 +6,19 @@ class OrderRepository {
 
   OrderRepository({required this.orderService});
 
-  Future<List<Order>> getOrder({required int page, required int limit}) async {
-    return await orderService.getAllOrders(page: page, limit: limit);
+  Future<List<Order>> getAllOrder() async {
+    return await orderService.getAllOrders();
+  }
+
+  Future<List<Order>> getReadyOrders() async {
+    return await orderService.getReadyOrders();
+  }
+
+  Future<List<Order>> getDeliveringOrders() async {
+    return await orderService.getDeliveringOrders();
+  }
+
+  Future<List<Order>> getDeliveredOrders() async {
+    return await orderService.getDeliveredOrders();
   }
 }

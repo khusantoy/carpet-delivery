@@ -35,18 +35,18 @@ class ProductInfoWidget extends StatelessWidget {
                     height: 40.h,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10).w,
-                      color: status == 'RECEIVED'
+                      color: status == 'DELIVERED'
                           ? AppColors.deliveredColorAccent
-                          : status == 'PREPARING'
+                          : status == 'DELIVERING'
                               ? AppColors.deliveringColorAccent
                               : AppColors.readyColorAccent,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0).w,
                       child: SvgPicture.asset(
-                        status == 'RECEIVED'
+                        status == 'DELIVERED'
                             ? "assets/icons/green_package_icon.svg"
-                            : status == 'PREPARING'
+                            : status == 'DELIVERING'
                                 ? "assets/icons/orange_package_icon.svg"
                                 : "assets/icons/red_package_icon.svg",
                       ),
@@ -161,9 +161,9 @@ class ProductInfoWidget extends StatelessWidget {
                 height: 40.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10).w,
-                  color: status == 'RECEIVED'
+                  color: status == 'DELIVERED'
                       ? AppColors.deliveredColorAccent
-                      : status == 'PREPARING'
+                      : status == 'DELIVERING'
                           ? AppColors.deliveringColorAccent
                           : AppColors.readyColorAccent,
                 ),
@@ -196,7 +196,7 @@ class ProductInfoWidget extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: 20.h,
+            height: 10.h,
           ),
           Row(
             children: [
@@ -216,24 +216,24 @@ class ProductInfoWidget extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
                 decoration: BoxDecoration(
-                  color: status == 'RECEIVED'
+                  color: status == 'DELIVERED'
                       ? AppColors.deliveredColorAccent
-                      : status == 'PREPARING'
+                      : status == 'DELIVERING'
                           ? AppColors.deliveringColorAccent
                           : AppColors.readyColorAccent,
                   borderRadius: BorderRadius.circular(8).r,
                 ),
                 child: Text(
-                  status == 'RECEIVED'
+                  status == 'DELIVERED'
                       ? "Yetkazilgan"
-                      : status == 'PREPARING'
+                      : status == 'DELIVERING'
                           ? 'Yetkazilyapti'
                           : 'Yetkazilmagan',
                   style: TextStyle(
                     fontSize: 12.sp,
-                    color: status == 'RECEIVED'
+                    color: status == 'DELIVERED'
                         ? AppColors.deliveredColor
-                        : status == 'PREPARING'
+                        : status == 'DELIVERING'
                             ? AppColors.deliveringColor
                             : AppColors.readyColor,
                   ),

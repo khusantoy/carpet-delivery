@@ -57,7 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scaffoldGrey,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         title: const Text("Profil"),
       ),
@@ -79,9 +79,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             final user = state.user;
             return Column(
               children: [
-                SizedBox(
-                  height: 6.h,
-                ),
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 8.h),
                   color: AppColors.white,
@@ -119,8 +116,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
-                SizedBox(
+                Container(
                   height: 6.h,
+                  color: AppColors.scaffoldGrey,
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(
@@ -154,8 +152,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 8.h,
+                Container(
+                  height: 6.h,
+                  color: AppColors.scaffoldGrey,
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(

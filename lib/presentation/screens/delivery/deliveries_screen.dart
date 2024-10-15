@@ -61,8 +61,7 @@ class _DeliveriesScreenState extends State<DeliveriesScreen> {
           )
         ],
       ),
-      body: BlocBuilder(
-        bloc: context.read<OrderBloc>()..add(GetOrderEvent(page: 1, limit: 10)),
+      body: BlocBuilder<OrderBloc, OrderState>(
         builder: (context, state) {
           if (state is LoadingOrderState) {
             return Center(
@@ -80,7 +79,7 @@ class _DeliveriesScreenState extends State<DeliveriesScreen> {
             final orders = state.orders;
 
             return ListView.separated(
-              itemCount: 10,
+              itemCount: orders.length,
               separatorBuilder: (context, index) {
                 return SizedBox(
                   height: 5.h,

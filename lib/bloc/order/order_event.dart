@@ -2,12 +2,10 @@ part of 'order_bloc.dart';
 
 sealed class OrderEvent {}
 
-class GetOrderEvent extends OrderEvent {
-  int page;
-  int limit;
+class GetAllOrdersEvent extends OrderEvent {}
 
-  GetOrderEvent({
-    required this.page,
-    required this.limit,
-  });
-}
+class GetReadyOrdersEvent extends OrderEvent {}
+
+class GetDeliveringOrdersEvent extends OrderEvent {}
+
+class GetDeliveredOrdersEvent extends OrderEvent {}
