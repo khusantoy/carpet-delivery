@@ -14,7 +14,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<OrderBloc>().add(GetAllOrdersEvent());
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
         context.read<AuthBloc>().add(CheckAuthStatusEvent());

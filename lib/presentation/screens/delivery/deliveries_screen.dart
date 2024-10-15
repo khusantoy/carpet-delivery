@@ -74,6 +74,7 @@ class _DeliveriesScreenState extends State<DeliveriesScreen> {
         ],
       ),
       body: BlocBuilder<OrderBloc, OrderState>(
+        bloc: context.read<OrderBloc>()..add(GetAllOrdersEvent()),
         builder: (context, state) {
           if (state is LoadingOrderState) {
             return Center(
