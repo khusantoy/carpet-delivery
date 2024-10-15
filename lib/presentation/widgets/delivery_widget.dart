@@ -169,10 +169,14 @@ class ProductInfoWidget extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0).w,
-                  child: const Center(
+                  child: Center(
                     child: Icon(
                       Icons.location_pin,
-                      color: Colors.red,
+                      color: status == "DELIVERED"
+                          ? AppColors.deliveredColor
+                          : status == 'DELIVERING'
+                              ? AppColors.deliveringColor
+                              : AppColors.readyColor,
                     ),
                   ),
                 ),

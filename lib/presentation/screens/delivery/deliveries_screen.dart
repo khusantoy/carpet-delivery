@@ -40,21 +40,33 @@ class _DeliveriesScreenState extends State<DeliveriesScreen> {
             },
             itemBuilder: (context) {
               return [
-                const PopupMenuItem(
+                PopupMenuItem(
+                  onTap: () {
+                    context.read<OrderBloc>().add(GetAllOrdersEvent());
+                  },
                   value: FilterItem.all,
-                  child: Text("Barchasi"),
+                  child: const Text("Barchasi"),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
+                  onTap: () {
+                    context.read<OrderBloc>().add(GetReadyOrdersEvent());
+                  },
                   value: FilterItem.pending,
-                  child: Text("Yetkazilmagan"),
+                  child: const Text("Yetkazilmagan"),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
+                  onTap: () {
+                    context.read<OrderBloc>().add(GetDeliveringOrdersEvent());
+                  },
                   value: FilterItem.progress,
-                  child: Text("Yetkazilmoqda"),
+                  child: const Text("Yetkazilmoqda"),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
+                  onTap: () {
+                    context.read<OrderBloc>().add(GetDeliveredOrdersEvent());
+                  },
                   value: FilterItem.completed,
-                  child: Text("Yetkazilgan"),
+                  child: const Text("Yetkazilgan"),
                 )
               ];
             },

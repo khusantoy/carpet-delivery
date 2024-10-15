@@ -11,7 +11,7 @@ class OrderService {
       List<Order> orders = [];
 
       final readyOrders = await getReadyOrders();
-      final deliveringOrders = await getDeliveredOrders();
+      final deliveringOrders = await getDeliveringOrders();
       final deliveredOrders = await getDeliveredOrders();
 
       orders.addAll(readyOrders);
