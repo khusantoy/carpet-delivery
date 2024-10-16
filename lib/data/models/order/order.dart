@@ -2,19 +2,21 @@ class Order {
   final String id;
   final Client client;
   final String status;
+  final String address;
 
   Order({
     required this.id,
     required this.client,
     required this.status,
+    required this.address,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
-      id: json['id'],
-      client: Client.fromJson(json['client']),
-      status: json['status'],
-    );
+        id: json['id'],
+        client: Client.fromJson(json['client']),
+        status: json['status'],
+        address: json['address']);
   }
 
   Map<String, dynamic> toJson() {
@@ -22,6 +24,7 @@ class Order {
       "id": id,
       "client": client.toJson(),
       "status": status,
+      "address": address
     };
   }
 }
@@ -29,8 +32,8 @@ class Order {
 class Client {
   final String fullName;
   final String phoneNumber;
-  final num latitude;
-  final num longitude;
+  final double latitude;
+  final double longitude;
 
   Client({
     required this.fullName,

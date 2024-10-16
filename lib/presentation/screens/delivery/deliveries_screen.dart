@@ -15,8 +15,26 @@ class DeliveriesScreen extends StatefulWidget {
   State<DeliveriesScreen> createState() => _DeliveriesScreenState();
 }
 
-class _DeliveriesScreenState extends State<DeliveriesScreen> {
+class _DeliveriesScreenState extends State<DeliveriesScreen>
+    with SingleTickerProviderStateMixin {
   FilterItem? selectedItem;
+
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +96,12 @@ class _DeliveriesScreenState extends State<DeliveriesScreen> {
         builder: (context, state) {
           if (state is LoadingOrderState) {
             return Center(
-              child: Lottie.asset('assets/lottie.json'),
+              child: Lottie.asset(
+                'assets/lottie.json',
+                controller: _controller,
+                reverse: true,
+                animate: true,
+              ),
             );
           }
 
@@ -105,6 +128,9 @@ class _DeliveriesScreenState extends State<DeliveriesScreen> {
                   status: order.status,
                   fullName: order.client.fullName,
                   phoneNumber: order.client.phoneNumber,
+                  latitude: order.client.latitude,
+                  longitude: order.client.longitude,
+                  address: order.address,
                 );
               },
             );

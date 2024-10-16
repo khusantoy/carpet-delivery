@@ -2,6 +2,7 @@ import 'package:carpet_delivery/core/dependency/di.dart';
 import 'package:carpet_delivery/core/network/dio_network.dart';
 import 'package:carpet_delivery/data/models/order/order.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class OrderService {
   final _dio = getIt.get<DioNetwork>().dio;
@@ -53,6 +54,13 @@ class OrderService {
       }
 
       for (var order in allOrders) {
+        double latitude = order['client']['latitude'];
+        double longitude = order['client']['longitude'];
+
+        final address =
+            await geocoder(latitude: latitude, longitude: longitude);
+
+        order['address'] = address;
         orders.add(Order.fromJson(order));
       }
 
@@ -94,6 +102,13 @@ class OrderService {
       }
 
       for (var order in allOrders) {
+        double latitude = order['client']['latitude'];
+        double longitude = order['client']['longitude'];
+
+        final address =
+            await geocoder(latitude: latitude, longitude: longitude);
+
+        order['address'] = address;
         orders.add(Order.fromJson(order));
       }
 
@@ -135,6 +150,13 @@ class OrderService {
       }
 
       for (var order in allOrders) {
+        double latitude = order['client']['latitude'];
+        double longitude = order['client']['longitude'];
+
+        final address =
+            await geocoder(latitude: latitude, longitude: longitude);
+
+        order['address'] = address;
         orders.add(Order.fromJson(order));
       }
 
@@ -144,6 +166,25 @@ class OrderService {
       rethrow;
     } catch (e) {
       print("DELIVERED ORDER EXCEPTION: $e");
+      rethrow;
+    }
+  }
+
+  Future<String> geocoder({
+    required double latitude,
+    required double longitude,
+  }) async {
+    final geoDio = Dio();
+    final apiKey = dotenv.env['YANDEX_GEOCODER_API'];
+
+    try {
+      final response = await geoDio.get(
+          "https://geocode-maps.yandex.ru/1.x/?apikey=$apiKey&geocode=$latitude,$longitude&lang=uz_UZ&format=json");
+
+      return response.data['response']['GeoObjectCollection']['featureMember']
+          [0]['GeoObject']['metaDataProperty']['GeocoderMetaData']['text'];
+    } catch (e) {
+      print("GEOCODER ERROR => $e");
       rethrow;
     }
   }

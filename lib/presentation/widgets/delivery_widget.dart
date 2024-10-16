@@ -8,17 +8,22 @@ class ProductInfoWidget extends StatelessWidget {
   final String status;
   final String fullName;
   final String phoneNumber;
+  final double latitude;
+  final double longitude;
+  final String address;
 
   const ProductInfoWidget({
     super.key,
     required this.status,
     required this.fullName,
     required this.phoneNumber,
+    required this.latitude,
+    required this.longitude,
+    required this.address,
   });
 
   @override
   Widget build(BuildContext context) {
-    print(status);
     return Container(
       padding: const EdgeInsets.all(15),
       color: Colors.white,
@@ -187,10 +192,11 @@ class ProductInfoWidget extends StatelessWidget {
               SizedBox(
                 width: MediaQuery.of(context).size.width - 96.w,
                 child: Text(
-                  "Chilonzor Tumani, 9-mavze, 2-dom, 1-padez, 8-xonadon",
+                  address,
                   style: TextStyle(
                     fontSize: 14.sp,
                     color: AppColors.locationColor,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   softWrap: true,
                   maxLines: null,
