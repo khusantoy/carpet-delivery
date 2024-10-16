@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:carpet_delivery/core/dependency/di.dart';
 import 'package:carpet_delivery/data/models/auth/login_request.dart';
-import 'package:carpet_delivery/data/models/auth/register_request.dart';
 import 'package:carpet_delivery/data/repositories/auth_repository.dart';
 import 'package:carpet_delivery/data/services/auth_local_service.dart';
 part 'auth_event.dart';
@@ -37,7 +36,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _onCheckAuthStatus(CheckAuthStatusEvent event, emit) {
     final AuthLocalService authLocalService = getIt.get<AuthLocalService>();
-    final token = authLocalService.getToken();
+    final token = authLocalService.getAccessToken();
 
     bool isAuthorized = token == null ? false : true;
 

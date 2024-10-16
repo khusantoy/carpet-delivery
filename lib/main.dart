@@ -1,13 +1,16 @@
 import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
+import 'package:carpet_delivery/bloc/order/order_bloc.dart';
 import 'package:carpet_delivery/bloc/user_profile/user_bloc.dart';
 import 'package:carpet_delivery/core/dependency/di.dart';
 import 'package:carpet_delivery/data/repositories/auth_repository.dart';
+import 'package:carpet_delivery/data/repositories/order_repository.dart';
 import 'package:carpet_delivery/data/repositories/user_repository.dart';
 import 'package:carpet_delivery/presentation/screens/auth/login_screen.dart';
 import 'package:carpet_delivery/presentation/screens/main/main_screen.dart';
 import 'package:carpet_delivery/presentation/screens/splash_screen/splash_screen.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,6 +18,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dependencyInit();
 
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
@@ -38,15 +42,21 @@ class MyApp extends StatelessWidget {
             create: (context) => UserBloc(
               userRepository: getIt.get<UserRepository>(),
             ),
+          ),
+          BlocProvider(
+            create: (context) => OrderBloc(
+              orderRepository: getIt.get<OrderRepository>(),
+            ),
           )
         ],
         child: MaterialApp(
-          title: 'Yetkazib berish',
+          title: 'Yetkazmalar',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             scaffoldBackgroundColor: AppColors.white,
             appBarTheme: const AppBarTheme(
-              backgroundColor: AppColors.white,
+              backgroundColor: AppColors.customBlack,
+              foregroundColor: AppColors.white,
             ),
           ),
           home: BlocBuilder<AuthBloc, AuthState>(

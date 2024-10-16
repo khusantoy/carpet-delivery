@@ -2,8 +2,6 @@ import 'package:carpet_delivery/presentation/screens/delivery/deliveries_screen.
 import 'package:carpet_delivery/presentation/screens/profile/profile_screen.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -25,45 +23,44 @@ class _MainScreenState extends State<MainScreen> {
           ProfileScreen(),
         ],
       ),
-      bottomNavigationBar: SizedBox(
-        height: 55.h,
-        child: BottomNavigationBar(
+      bottomNavigationBar: NavigationBarTheme(
+        data: NavigationBarThemeData(
+          labelTextStyle: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return const TextStyle(
+                  color: Colors.white); // Selected label color
+            }
+            return const TextStyle(
+                color: Colors.grey); // Unselected label color
+          }),
+        ),
+        child: NavigationBar(
           backgroundColor: AppColors.customBlack,
-          currentIndex: currentIndex,
-          selectedItemColor: AppColors.white,
-          unselectedItemColor: AppColors.bottomNavigationLabelColor,
-          onTap: (value) {
+          selectedIndex: currentIndex,
+          indicatorColor: AppColors.white,
+          shadowColor: Colors.red,
+          onDestinationSelected: (value) {
             setState(() {
               currentIndex = value;
             });
           },
-          items: [
-            BottomNavigationBarItem(
-              activeIcon: SvgPicture.asset(
-                "assets/icons/shipping_active.svg",
-                width: 24.w,
-                height: 24.h,
+          destinations: const [
+            NavigationDestination(
+              selectedIcon: Icon(Icons.local_shipping_rounded),
+              icon: Icon(
+                Icons.local_shipping_rounded,
+                color: Colors.grey,
               ),
-              icon: SvgPicture.asset(
-                "assets/icons/shipping.svg",
-                width: 24.w,
-                height: 24.h,
-              ),
-              label: "Yetkazmalar",
+              label: 'Yetkazma',
             ),
-            BottomNavigationBarItem(
-              activeIcon: SvgPicture.asset(
-                "assets/icons/person_active.svg",
-                width: 24.w,
-                height: 24.h,
+            NavigationDestination(
+              selectedIcon: Icon(Icons.person),
+              icon: Icon(
+                Icons.person,
+                color: Colors.grey,
               ),
-              icon: SvgPicture.asset(
-                "assets/icons/person.svg",
-                width: 24.w,
-                height: 24.h,
-              ),
-              label: "Profil",
-            )
+              label: 'Profil',
+            ),
           ],
         ),
       ),

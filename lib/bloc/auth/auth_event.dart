@@ -11,11 +11,4 @@ class LoginAuthEvent extends AuthEvent {
 
 class LogoutAuthEvent extends AuthEvent {}
 
-class RegisterAuthEvent extends AuthEvent {
-  final RegisterRequest request;
-  RegisterAuthEvent({
-    required this.request,
-  });
-}
-
 class CheckAuthStatusEvent extends AuthEvent {}

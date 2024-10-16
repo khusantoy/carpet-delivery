@@ -44,6 +44,8 @@ dependencies:
   shared_preferences: ^2.3.2
   dio: ^5.7.0
   get_it: ^8.0.0
+  lottie: ^3.1.2
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +73,8 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+    - assets/
+    - .env
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

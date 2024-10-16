@@ -6,13 +6,26 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class ProductInfoWidget extends StatelessWidget {
   final String status;
+  final String fullName;
+  final String phoneNumber;
+  final double latitude;
+  final double longitude;
+  final String address;
 
-  const ProductInfoWidget({super.key, required this.status});
+  const ProductInfoWidget({
+    super.key,
+    required this.status,
+    required this.fullName,
+    required this.phoneNumber,
+    required this.latitude,
+    required this.longitude,
+    required this.address,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20.0).w,
+      padding: const EdgeInsets.all(15),
       color: Colors.white,
       child: Column(
         children: [
@@ -27,18 +40,18 @@ class ProductInfoWidget extends StatelessWidget {
                     height: 40.h,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10).w,
-                      color: status == 'delivered'
+                      color: status == 'DELIVERED'
                           ? AppColors.deliveredColorAccent
-                          : status == 'delivering'
+                          : status == 'DELIVERING'
                               ? AppColors.deliveringColorAccent
                               : AppColors.readyColorAccent,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0).w,
                       child: SvgPicture.asset(
-                        status == 'delivered'
+                        status == 'DELIVERED'
                             ? "assets/icons/green_package_icon.svg"
-                            : status == 'delivering'
+                            : status == 'DELIVERING'
                                 ? "assets/icons/orange_package_icon.svg"
                                 : "assets/icons/red_package_icon.svg",
                       ),
@@ -47,34 +60,32 @@ class ProductInfoWidget extends StatelessWidget {
                   SizedBox(
                     width: 16.w,
                   ),
-                  Text(
-                    "#5R9G87R",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16.sp,
-                      color: const Color(0xFF21252C),
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        phoneNumber,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16.sp,
+                          color: const Color(0xFF21252C),
+                        ),
+                      ),
+                      Text(
+                        fullName,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: AppColors.locationColor,
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     width: 8.w,
                   ),
-                  Container(
-                    width: 4.w,
-                    height: 4.h,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFD2D6DB),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
                   SizedBox(
                     width: 8.w,
-                  ),
-                  Text(
-                    "14 may 2024",
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: const Color(0xFFBABFC5),
-                    ),
                   ),
                 ],
               ),
@@ -84,40 +95,60 @@ class ProductInfoWidget extends StatelessWidget {
                 onSelected: (value) {},
                 itemBuilder: (context) {
                   return [
-                    const PopupMenuItem(
-                      child: ListTile(
-                        leading: Icon(
-                          CupertinoIcons.map,
-                          color: AppColors.yandexYellow,
-                        ),
-                        title: Text("Yandex Map orqali ochish"),
+                    PopupMenuItem(
+                      child: Row(
+                        children: [
+                          const Icon(
+                            CupertinoIcons.map,
+                            color: AppColors.yandexYellow,
+                          ),
+                          SizedBox(
+                            width: 6.w,
+                          ),
+                          const Text("Xaritada ko'rish")
+                        ],
                       ),
                     ),
-                    const PopupMenuItem(
-                      child: ListTile(
-                        leading: Icon(
-                          CupertinoIcons.check_mark_circled,
-                          color: AppColors.deliveredColor,
-                        ),
-                        title: Text("Yetkazilgan qilib belgilash"),
+                    PopupMenuItem(
+                      child: Row(
+                        children: [
+                          const Icon(
+                            CupertinoIcons.check_mark_circled,
+                            color: AppColors.deliveredColor,
+                          ),
+                          SizedBox(
+                            width: 6.w,
+                          ),
+                          const Text("Yetkazilgan")
+                        ],
                       ),
                     ),
-                    const PopupMenuItem(
-                      child: ListTile(
-                        leading: Icon(
-                          CupertinoIcons.paperplane,
-                          color: AppColors.deliveringColor,
-                        ),
-                        title: Text("Yetkazilyapti qilib belgilash"),
+                    PopupMenuItem(
+                      child: Row(
+                        children: [
+                          const Icon(
+                            CupertinoIcons.paperplane,
+                            color: AppColors.deliveringColor,
+                          ),
+                          SizedBox(
+                            width: 6.w,
+                          ),
+                          const Text("Yetkazilyapti")
+                        ],
                       ),
                     ),
-                    const PopupMenuItem(
-                      child: ListTile(
-                        leading: Icon(
-                          CupertinoIcons.xmark_circle,
-                          color: AppColors.readyColor,
-                        ),
-                        title: Text("Yetkazilmagan qilib belgilash"),
+                    PopupMenuItem(
+                      child: Row(
+                        children: [
+                          const Icon(
+                            CupertinoIcons.xmark_circle,
+                            color: AppColors.readyColor,
+                          ),
+                          SizedBox(
+                            width: 6.w,
+                          ),
+                          const Text("Yetkazilmagan")
+                        ],
                       ),
                     )
                   ];
@@ -125,56 +156,47 @@ class ProductInfoWidget extends StatelessWidget {
               )
             ],
           ),
+          SizedBox(
+            height: 10.h,
+          ),
           Row(
             children: [
-              SizedBox(
-                width: 56.w,
-              ),
               Container(
-                width: 16.w,
-                height: 16.h,
+                width: 40.w,
+                height: 40.h,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.amber),
-                  shape: BoxShape.circle,
+                  borderRadius: BorderRadius.circular(10).w,
+                  color: status == 'DELIVERED'
+                      ? AppColors.deliveredColorAccent
+                      : status == 'DELIVERING'
+                          ? AppColors.deliveringColorAccent
+                          : AppColors.readyColorAccent,
                 ),
-                child: Center(
-                  child: Container(
-                    width: 6.w,
-                    height: 6.h,
-                    decoration: const BoxDecoration(
-                      color: Colors.amber,
-                      shape: BoxShape.circle,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0).w,
+                  child: Center(
+                    child: Icon(
+                      Icons.location_pin,
+                      color: status == "DELIVERED"
+                          ? AppColors.deliveredColor
+                          : status == 'DELIVERING'
+                              ? AppColors.deliveringColor
+                              : AppColors.readyColor,
                     ),
                   ),
                 ),
               ),
               SizedBox(
-                width: 10.w,
-              ),
-              Text(
-                "Manzil",
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: const Color(0xFFBABFC5),
-                ),
-              )
-            ],
-          ),
-          Row(
-            children: [
-              SizedBox(
-                width: 72.w,
+                width: 16.w,
               ),
               SizedBox(
-                width: 10.w,
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width - 122.w,
+                width: MediaQuery.of(context).size.width - 96.w,
                 child: Text(
-                  "Chilonzor Tumani, 9-mavze, 2-dom, 1-padez, 8-xonadon",
+                  address,
                   style: TextStyle(
                     fontSize: 14.sp,
                     color: AppColors.locationColor,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   softWrap: true,
                   maxLines: null,
@@ -184,7 +206,7 @@ class ProductInfoWidget extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: 20.h,
+            height: 10.h,
           ),
           Row(
             children: [
@@ -204,24 +226,24 @@ class ProductInfoWidget extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
                 decoration: BoxDecoration(
-                  color: status == 'delivered'
+                  color: status == 'DELIVERED'
                       ? AppColors.deliveredColorAccent
-                      : status == 'delivering'
+                      : status == 'DELIVERING'
                           ? AppColors.deliveringColorAccent
                           : AppColors.readyColorAccent,
                   borderRadius: BorderRadius.circular(8).r,
                 ),
                 child: Text(
-                  status == 'delivered'
+                  status == 'DELIVERED'
                       ? "Yetkazilgan"
-                      : status == 'delivering'
+                      : status == 'DELIVERING'
                           ? 'Yetkazilyapti'
                           : 'Yetkazilmagan',
                   style: TextStyle(
                     fontSize: 12.sp,
-                    color: status == 'delivered'
+                    color: status == 'DELIVERED'
                         ? AppColors.deliveredColor
-                        : status == 'delivering'
+                        : status == 'DELIVERING'
                             ? AppColors.deliveringColor
                             : AppColors.readyColor,
                   ),

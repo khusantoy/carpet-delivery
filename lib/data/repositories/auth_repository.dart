@@ -1,6 +1,5 @@
 import 'package:carpet_delivery/data/models/auth/auth_response.dart';
 import 'package:carpet_delivery/data/models/auth/login_request.dart';
-import 'package:carpet_delivery/data/models/auth/register_request.dart';
 import 'package:carpet_delivery/data/services/auth_api_service.dart';
 import 'package:carpet_delivery/data/services/auth_local_service.dart';
 
@@ -15,14 +14,12 @@ class AuthRepository {
 
   Future<void> login(LoginRequest request) async {
     final AuthResponse authResponse = await authApiService.login(request);
-    await authLocalService.saveToken(authResponse);
+    await authLocalService.saveAccessToken(authResponse);
+    await authLocalService.saveRefreshToken(authResponse);
   }
 
   Future<void> logout() async {
-    await authLocalService.deleteToken();
-  }
-
-  Future<void> register(RegisterRequest request) async {
-    await authApiService.register(request);
+    await authLocalService.deleteAccessToken();
+    await authLocalService.deleteRefreshToken();
   }
 }

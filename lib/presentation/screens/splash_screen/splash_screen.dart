@@ -1,4 +1,5 @@
 import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
+import 'package:carpet_delivery/bloc/order/order_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,7 +15,9 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 3), () {
-      context.read<AuthBloc>().add(CheckAuthStatusEvent());
+      if (mounted) {
+        context.read<AuthBloc>().add(CheckAuthStatusEvent());
+      }
     });
   }
 

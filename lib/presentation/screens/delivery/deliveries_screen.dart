@@ -1,129 +1,143 @@
+import 'package:carpet_delivery/bloc/order/order_bloc.dart';
 import 'package:carpet_delivery/presentation/widgets/delivery_widget.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
-class DeliveriesScreen extends StatelessWidget {
+enum FilterItem { all, pending, progress, completed }
+
+class DeliveriesScreen extends StatefulWidget {
   const DeliveriesScreen({super.key});
 
   @override
+  State<DeliveriesScreen> createState() => _DeliveriesScreenState();
+}
+
+class _DeliveriesScreenState extends State<DeliveriesScreen>
+    with SingleTickerProviderStateMixin {
+  FilterItem? selectedItem;
+
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 4,
-      child: Scaffold(
-        backgroundColor: AppColors.scaffoldGrey,
-        appBar: AppBar(
-          title: const Text("Yetkazib berish"),
-          bottom: const TabBar(
-            indicatorColor: AppColors.customBlack,
-            indicatorWeight: 4,
-            labelColor: AppColors.customBlack,
-            unselectedLabelColor: AppColors.locationColor,
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            tabs: [
-              Tab(
-                text: "Barchasi",
-              ),
-              Tab(
-                text: "Yetkazilmagan",
-              ),
-              Tab(
-                text: "Yetkazilyapti",
-              ),
-              Tab(
-                text: "Yetkazilgan",
-              ),
-            ],
-          ),
+    return Scaffold(
+      backgroundColor: AppColors.scaffoldGrey,
+      appBar: AppBar(
+        title: Badge.count(
+          count: 10,
+          alignment: const Alignment(1.4, -1),
+          child: const Text("Barchasi"),
         ),
-        body: TabBarView(
-          children: [
-            ListView.separated(
-              itemCount: 10,
+        actions: [
+          PopupMenuButton<FilterItem>(
+            icon: const Icon(Icons.filter_alt),
+            color: AppColors.white,
+            initialValue: selectedItem,
+            onSelected: (FilterItem item) {
+              setState(() {
+                selectedItem = item;
+              });
+            },
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  onTap: () {
+                    context.read<OrderBloc>().add(GetAllOrdersEvent());
+                  },
+                  value: FilterItem.all,
+                  child: const Text("Barchasi"),
+                ),
+                PopupMenuItem(
+                  onTap: () {
+                    context.read<OrderBloc>().add(GetReadyOrdersEvent());
+                  },
+                  value: FilterItem.pending,
+                  child: const Text("Yetkazilmagan"),
+                ),
+                PopupMenuItem(
+                  onTap: () {
+                    context.read<OrderBloc>().add(GetDeliveringOrdersEvent());
+                  },
+                  value: FilterItem.progress,
+                  child: const Text("Yetkazilmoqda"),
+                ),
+                PopupMenuItem(
+                  onTap: () {
+                    context.read<OrderBloc>().add(GetDeliveredOrdersEvent());
+                  },
+                  value: FilterItem.completed,
+                  child: const Text("Yetkazilgan"),
+                )
+              ];
+            },
+          )
+        ],
+      ),
+      body: BlocBuilder<OrderBloc, OrderState>(
+        bloc: context.read<OrderBloc>()..add(GetAllOrdersEvent()),
+        builder: (context, state) {
+          if (state is LoadingOrderState) {
+            return Center(
+              child: Lottie.asset(
+                'assets/lottie.json',
+                controller: _controller,
+                reverse: true,
+                animate: true,
+              ),
+            );
+          }
+
+          if (state is ErrorOrderState) {
+            return Center(
+              child: Text(state.message),
+            );
+          }
+
+          if (state is LoadedOrderState) {
+            final orders = state.orders;
+
+            return ListView.separated(
+              itemCount: orders.length,
               separatorBuilder: (context, index) {
-                return const SizedBox(
-                  height: 8,
+                return SizedBox(
+                  height: 5.h,
                 );
               },
               itemBuilder: (context, index) {
-                String status = 'delivered';
-
-                if (index.isOdd) {
-                  status = 'delivering';
-                } else if (index % 5 == 0) {
-                  status = 'ready';
-                }
+                final order = orders[index];
 
                 return ProductInfoWidget(
-                  status: status,
+                  status: order.status,
+                  fullName: order.client.fullName,
+                  phoneNumber: order.client.phoneNumber,
+                  latitude: order.client.latitude,
+                  longitude: order.client.longitude,
+                  address: order.address,
                 );
               },
-            ),
-            ListView.separated(
-              itemCount: 10,
-              separatorBuilder: (context, index) {
-                return const SizedBox(
-                  height: 8,
-                );
-              },
-              itemBuilder: (context, index) {
-                String status = 'delivered';
+            );
+          }
 
-                if (index.isOdd) {
-                  status = 'delivering';
-                } else if (index % 5 == 0) {
-                  status = 'ready';
-                }
-
-                return ProductInfoWidget(
-                  status: status,
-                );
-              },
-            ),
-            ListView.separated(
-              itemCount: 10,
-              separatorBuilder: (context, index) {
-                return const SizedBox(
-                  height: 8,
-                );
-              },
-              itemBuilder: (context, index) {
-                String status = 'delivered';
-
-                if (index.isOdd) {
-                  status = 'delivering';
-                } else if (index % 5 == 0) {
-                  status = 'ready';
-                }
-
-                return ProductInfoWidget(
-                  status: status,
-                );
-              },
-            ),
-            ListView.separated(
-              itemCount: 10,
-              separatorBuilder: (context, index) {
-                return const SizedBox(
-                  height: 8,
-                );
-              },
-              itemBuilder: (context, index) {
-                String status = 'delivered';
-
-                if (index.isOdd) {
-                  status = 'delivering';
-                } else if (index % 5 == 0) {
-                  status = 'ready';
-                }
-
-                return ProductInfoWidget(
-                  status: status,
-                );
-              },
-            ),
-          ],
-        ),
+          return const SizedBox();
+        },
       ),
     );
   }

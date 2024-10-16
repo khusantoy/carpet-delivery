@@ -4,17 +4,31 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthLocalService {
   final token = "token";
+  final refreshToken = "refresh_token";
+
   final preferance = getIt.get<SharedPreferences>();
 
-  Future<void> saveToken(AuthResponse auth) async {
+  Future<void> saveAccessToken(AuthResponse auth) async {
     await preferance.setString(token, auth.token);
   }
 
-  String? getToken() {
+  Future<void> saveRefreshToken(AuthResponse auth) async {
+    await preferance.setString(refreshToken, auth.refreshToken);
+  }
+
+  String? getAccessToken() {
     return preferance.getString(token);
   }
 
-  Future<void> deleteToken() async {
+  String? getRefreshToken() {
+    return preferance.getString(refreshToken);
+  }
+
+  Future<void> deleteAccessToken() async {
     await preferance.remove(token);
+  }
+
+  Future<void> deleteRefreshToken() async {
+    await preferance.remove(refreshToken);
   }
 }
