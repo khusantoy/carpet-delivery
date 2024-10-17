@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
             create: (context) => OrderBloc(
               orderRepository: getIt.get<OrderRepository>(),
             ),
-          )
+          ),
         ],
         child: MaterialApp(
           title: 'Yetkazmalar',
