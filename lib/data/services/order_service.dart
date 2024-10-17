@@ -181,8 +181,28 @@ class OrderService {
       final response = await geoDio.get(
           "https://geocode-maps.yandex.ru/1.x/?apikey=$apiKey&geocode=$latitude,$longitude&lang=uz_UZ&format=json");
 
-      return response.data['response']['GeoObjectCollection']['featureMember']
-          [0]['GeoObject']['metaDataProperty']['GeocoderMetaData']['text'];
+      final address1 = response.data['response']['GeoObjectCollection']
+              ['featureMember'][0]['GeoObject']['metaDataProperty']
+          ['GeocoderMetaData']['text'];
+
+      final List addressTwoFutureMember =
+          response.data['response']['GeoObjectCollection']['featureMember'];
+
+      if (addressTwoFutureMember.length > 2) {
+        String address2 = addressTwoFutureMember[2]['GeoObject']
+            ['metaDataProperty']['GeocoderMetaData']['text'];
+
+        List<String> list1 = address1.split(',');
+        List<String> list2 = address2.split(',');
+
+        List<String> list3 = [...list1, ...list2];
+        Set<String> uniqueList = list3.toSet();
+        List<String> res = uniqueList.toList().sublist(1);
+
+        return res.join(",").trim();
+      }
+
+      return address1;
     } catch (e) {
       print("GEOCODER ERROR => $e");
       rethrow;
