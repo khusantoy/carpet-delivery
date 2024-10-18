@@ -11,12 +11,28 @@ class Order {
     required this.address,
   });
 
+  Order copyWith({
+    String? id,
+    Client? client,
+    String? status,
+    String? address,
+    String? url,
+  }) {
+    return Order(
+      id: id ?? this.id,
+      client: client ?? this.client,
+      status: status ?? this.status,
+      address: address ?? this.address,
+    );
+  }
+
   factory Order.fromJson(Map<String, dynamic> json) {
     return Order(
-        id: json['id'],
-        client: Client.fromJson(json['client']),
-        status: json['status'],
-        address: json['address']);
+      id: json['id'],
+      client: Client.fromJson(json['client']),
+      status: json['status'],
+      address: json['address'],
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -24,7 +40,7 @@ class Order {
       "id": id,
       "client": client.toJson(),
       "status": status,
-      "address": address
+      "address": address,
     };
   }
 }

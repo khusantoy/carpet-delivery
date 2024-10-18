@@ -1,5 +1,6 @@
 import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
 import 'package:carpet_delivery/bloc/order/order_bloc.dart';
+import 'package:carpet_delivery/bloc/status/status_bloc.dart';
 import 'package:carpet_delivery/bloc/user_profile/user_bloc.dart';
 import 'package:carpet_delivery/core/dependency/di.dart';
 import 'package:carpet_delivery/data/repositories/auth_repository.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toastification/toastification.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,38 +50,45 @@ class MyApp extends StatelessWidget {
               orderRepository: getIt.get<OrderRepository>(),
             ),
           ),
-        ],
-        child: MaterialApp(
-          title: 'Yetkazmalar',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            scaffoldBackgroundColor: AppColors.white,
-            appBarTheme: const AppBarTheme(
-              backgroundColor: AppColors.customBlack,
-              foregroundColor: AppColors.white,
+          BlocProvider(
+            create: (context) => StatusBloc(
+              orderRepository: getIt.get<OrderRepository>(),
             ),
-          ),
-          home: BlocBuilder<AuthBloc, AuthState>(
-            buildWhen: (previous, current) {
-              return current is! ErrorAuthState && current is! LoadingAuthState;
-            },
-            builder: (context, state) {
-              if (state is InitialAuthState) {
-                return const SplashScreen();
-              }
-              if (state is UnauthorizedAuthState) {
-                return const LoginScreen();
-              }
-              if (state is AuthorizedAuthState) {
-                return const MainScreen();
-              }
-
-              return const Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            },
+          )
+        ],
+        child: ToastificationWrapper(
+          child: MaterialApp(
+            title: 'Yetkazmalar',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              scaffoldBackgroundColor: AppColors.white,
+              appBarTheme: const AppBarTheme(
+                backgroundColor: AppColors.customBlack,
+                foregroundColor: AppColors.white,
+              ),
+            ),
+            home: BlocBuilder<AuthBloc, AuthState>(
+              buildWhen: (previous, current) {
+                return current is! ErrorAuthState && current is! LoadingAuthState;
+              },
+              builder: (context, state) {
+                if (state is InitialAuthState) {
+                  return const SplashScreen();
+                }
+                if (state is UnauthorizedAuthState) {
+                  return const LoginScreen();
+                }
+                if (state is AuthorizedAuthState) {
+                  return const MainScreen();
+                }
+          
+                return const Scaffold(
+                  body: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),

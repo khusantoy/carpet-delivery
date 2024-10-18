@@ -9,6 +9,9 @@ class DioNetwork {
     _dio = dio;
     _dio.options.baseUrl = "http://18.194.52.136:8080";
     _dio.interceptors.add(NetworkInterceptor());
+    _dio.options.validateStatus = (status) {
+      return status != null && (status >= 200 && status < 300 || status == 500);
+    };
   }
 
   Dio get dio => _dio;

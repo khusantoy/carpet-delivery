@@ -21,4 +21,14 @@ class OrderRepository {
   Future<List<Order>> getDeliveredOrders() async {
     return await orderService.getDeliveredOrders();
   }
+
+  Future<bool> changeOrderStatus({
+    required String orderId,
+    required String status,
+  }) async {
+    return await orderService.changeOrderStatus(
+      orderId: orderId,
+      status: status,
+    );
+  }
 }

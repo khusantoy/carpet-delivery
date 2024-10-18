@@ -39,6 +39,10 @@ class OrderService {
           "status": "READY",
         });
 
+        if (response.statusCode == 500) {
+          return [];
+        }
+
         List<dynamic> orders = response.data['data']['orders'];
         allOrders.addAll(orders);
 
@@ -86,6 +90,10 @@ class OrderService {
           "limit": 10,
           "status": "DELIVERING",
         });
+
+        if (response.statusCode == 500) {
+          return [];
+        }
 
         List<dynamic> orders = response.data['data']['orders'];
         allOrders.addAll(orders);
@@ -166,6 +174,29 @@ class OrderService {
       rethrow;
     } catch (e) {
       print("DELIVERED ORDER EXCEPTION: $e");
+      rethrow;
+    }
+  }
+
+  Future<bool> changeOrderStatus({
+    required String orderId,
+    required String status,
+  }) async {
+    try {
+      final response = await _dio.put(
+        '/api/order_status/$orderId',
+        queryParameters: {
+          "status": status,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print("CHANGE ORDER STATUS: $e");
       rethrow;
     }
   }
