@@ -1,11 +1,14 @@
 import 'package:carpet_delivery/bloc/order/order_bloc.dart';
+import 'package:carpet_delivery/bloc/status/status_bloc.dart';
 import 'package:carpet_delivery/presentation/widgets/custom_popup_menu.dart';
 import 'package:carpet_delivery/presentation/widgets/delivery_widget.dart';
+import 'package:carpet_delivery/presentation/widgets/loading_order_shimmer.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:toastification/toastification.dart';
 
 class DeliveriesScreen extends StatefulWidget {
   const DeliveriesScreen({super.key});
@@ -48,180 +51,7 @@ class _DeliveriesScreenState extends State<DeliveriesScreen> {
         bloc: context.read<OrderBloc>()..add(GetOrdersEvent()),
         builder: (context, state) {
           if (state is LoadingOrderState) {
-            return ListView.separated(
-              itemCount: 4,
-              separatorBuilder: (context, index) {
-                return SizedBox(
-                  height: 5.h,
-                );
-              },
-              itemBuilder: (context, index) {
-                return Container(
-                  padding: const EdgeInsets.all(15),
-                  color: Colors.white,
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Shimmer.fromColors(
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                                child: Container(
-                                  width: 40.w,
-                                  height: 40.h,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10).w,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 16.w,
-                              ),
-                              SizedBox(
-                                width: 150.w,
-                                child: Shimmer.fromColors(
-                                  baseColor: Colors.grey[300]!,
-                                  highlightColor: Colors.grey[100]!,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        width: 130.w,
-                                        height: 14.sp,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(3),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Container(
-                                        width: 150.w,
-                                        height: 14.sp,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(3),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Row(
-                        children: [
-                          Shimmer.fromColors(
-                            baseColor: Colors.grey[300]!,
-                            highlightColor: Colors.grey[100]!,
-                            child: Container(
-                              width: 40.w,
-                              height: 40.h,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10).w,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 16.w,
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width - 96.w,
-                            child: Shimmer.fromColors(
-                              baseColor: Colors.grey[300]!,
-                              highlightColor: Colors.grey[100]!,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: MediaQuery.of(context).size.width -
-                                        96.w * 0.9,
-                                    height: 14.sp,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(3),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width -
-                                        96.w * 0.7,
-                                    height: 14.sp,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(3),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 56.w,
-                          ),
-                          Shimmer.fromColors(
-                            baseColor: Colors.grey[300]!,
-                            highlightColor: Colors.grey[100]!,
-                            child: Container(
-                              width: 50,
-                              height: 14.sp,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(3),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 12.w,
-                          ),
-                          Shimmer.fromColors(
-                            baseColor: Colors.grey[300]!,
-                            highlightColor: Colors.grey[100]!,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 4.h,
-                                horizontal: 8.w,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8).r,
-                              ),
-                              child: Text(
-                                "Yetkazilmagan",
-                                style: TextStyle(
-                                  fontSize: 12.sp,
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                );
-              },
-            );
+            return const LoadingOrderShimmer();
           }
 
           if (state is ErrorOrderState) {
@@ -233,24 +63,67 @@ class _DeliveriesScreenState extends State<DeliveriesScreen> {
           if (state is LoadedOrderState) {
             final orders = state.filteredOrders;
 
-            return ListView.separated(
-              itemCount: orders.length,
-              separatorBuilder: (context, index) {
-                return SizedBox(
-                  height: 5.h,
-                );
+            return BlocConsumer<StatusBloc, StatusState>(
+              listener: (context, state) {
+                if (state is LoadedStatusState) {
+                  if (state.isSuccess) {
+                    toastification.show(
+                      context: context,
+                      title: const Text("Status o'zgartirildi"),
+                      type: ToastificationType.success,
+                      autoCloseDuration: const Duration(seconds: 4),
+                      showProgressBar: false,
+                      closeButtonShowType: CloseButtonShowType.none,
+                    );
+                  } else {
+                    toastification.show(
+                      context: context,
+                      title: const Text("Nimadir xato"),
+                      type: ToastificationType.error,
+                      autoCloseDuration: const Duration(seconds: 4),
+                      showProgressBar: false,
+                      closeButtonShowType: CloseButtonShowType.none,
+                    );
+                  }
+                }
               },
-              itemBuilder: (context, index) {
-                final order = orders[index];
+              builder: (context, state) {
+                return orders.isEmpty
+                    ? Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height -
+                            MediaQuery.of(context).padding.top -
+                            MediaQuery.of(context).padding.bottom -
+                            kToolbarHeight,
+                        color: Colors.white,
+                        child: Center(
+                          child: SvgPicture.asset(
+                            "assets/images/empty.svg",
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      )
+                    : ListView.separated(
+                        itemCount: orders.length,
+                        separatorBuilder: (context, index) {
+                          return SizedBox(
+                            height: 5.h,
+                          );
+                        },
+                        itemBuilder: (context, index) {
+                          final order = orders[index];
 
-                return ProductInfoWidget(
-                  status: order.status,
-                  fullName: order.client.fullName,
-                  phoneNumber: order.client.phoneNumber,
-                  latitude: order.client.latitude,
-                  longitude: order.client.longitude,
-                  address: order.address,
-                );
+                          return ProductInfoWidget(
+                            id: order.id,
+                            status: order.status,
+                            fullName: order.client.fullName,
+                            phoneNumber: order.client.phoneNumber,
+                            latitude: order.client.latitude,
+                            longitude: order.client.longitude,
+                            address: order.address,
+                          );
+                        },
+                      );
               },
             );
           }

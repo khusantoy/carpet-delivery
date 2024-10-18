@@ -1,10 +1,13 @@
+import 'package:carpet_delivery/bloc/status/status_bloc.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ProductInfoWidget extends StatelessWidget {
+  final String id;
   final String status;
   final String fullName;
   final String phoneNumber;
@@ -14,6 +17,7 @@ class ProductInfoWidget extends StatelessWidget {
 
   const ProductInfoWidget({
     super.key,
+    required this.id,
     required this.status,
     required this.fullName,
     required this.phoneNumber,
@@ -110,6 +114,10 @@ class ProductInfoWidget extends StatelessWidget {
                       ),
                     ),
                     PopupMenuItem(
+                      onTap: () {
+                        context.read<StatusBloc>().add(ChangeStatusEvent(
+                            orderId: id, status: "DELIVERED"));
+                      },
                       child: Row(
                         children: [
                           const Icon(
@@ -124,6 +132,10 @@ class ProductInfoWidget extends StatelessWidget {
                       ),
                     ),
                     PopupMenuItem(
+                      onTap: () {
+                        context.read<StatusBloc>().add(ChangeStatusEvent(
+                            orderId: id, status: "DELIVERING"));
+                      },
                       child: Row(
                         children: [
                           const Icon(
@@ -138,6 +150,10 @@ class ProductInfoWidget extends StatelessWidget {
                       ),
                     ),
                     PopupMenuItem(
+                      onTap: () {
+                        context.read<StatusBloc>().add(
+                            ChangeStatusEvent(orderId: id, status: "READY"));
+                      },
                       child: Row(
                         children: [
                           const Icon(

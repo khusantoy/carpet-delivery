@@ -20,6 +20,7 @@ class OrdersList extends StatelessWidget {
         final order = orders[index];
 
         return ProductInfoWidget(
+          id: order.id,
           status: order.status,
           fullName: order.client.fullName,
           phoneNumber: order.client.phoneNumber,
