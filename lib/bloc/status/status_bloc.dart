@@ -17,7 +17,7 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
         orderId: event.orderId,
         status: event.status,
       );
-      emit(LoadedStatusState(isSuccess: response));
+      emit(LoadedStatusState(isSuccess: response, status: event.status, orderId: event.orderId));
     } catch (e) {
       print("STATUS BLOC ERROR => $e");
       emit(ErrorStatusState(message: e.toString()));

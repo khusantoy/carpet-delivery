@@ -71,16 +71,18 @@ class _DeliveriesScreenState extends State<DeliveriesScreen> {
                       context: context,
                       title: const Text("Status o'zgartirildi"),
                       type: ToastificationType.success,
-                      autoCloseDuration: const Duration(seconds: 4),
+                      autoCloseDuration: const Duration(seconds: 3),
                       showProgressBar: false,
                       closeButtonShowType: CloseButtonShowType.none,
                     );
+
+                    context.read<OrderBloc>().add(ChangeStatusOrdersEvent(status: state.status, orderId: state.orderId));
                   } else {
                     toastification.show(
                       context: context,
                       title: const Text("Nimadir xato"),
                       type: ToastificationType.error,
-                      autoCloseDuration: const Duration(seconds: 4),
+                      autoCloseDuration: const Duration(seconds: 3),
                       showProgressBar: false,
                       closeButtonShowType: CloseButtonShowType.none,
                     );
@@ -121,6 +123,7 @@ class _DeliveriesScreenState extends State<DeliveriesScreen> {
                             latitude: order.client.latitude,
                             longitude: order.client.longitude,
                             address: order.address,
+                            url: order.url,
                           );
                         },
                       );

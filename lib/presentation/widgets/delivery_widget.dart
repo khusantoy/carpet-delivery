@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:toastification/toastification.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductInfoWidget extends StatelessWidget {
   final String id;
@@ -14,6 +16,7 @@ class ProductInfoWidget extends StatelessWidget {
   final double latitude;
   final double longitude;
   final String address;
+  final String url;
 
   const ProductInfoWidget({
     super.key,
@@ -24,6 +27,7 @@ class ProductInfoWidget extends StatelessWidget {
     required this.latitude,
     required this.longitude,
     required this.address,
+    required this.url,
   });
 
   @override
@@ -100,6 +104,27 @@ class ProductInfoWidget extends StatelessWidget {
                 itemBuilder: (context) {
                   return [
                     PopupMenuItem(
+                      onTap: () async {
+                        final yandexUrl = Uri.parse(
+                            'yandexmaps://maps.yandex.ru/?'
+                            'pt=$latitude,$longitude' // nuqta koordinatalari
+                            '&z=14' // zoom darajasi (0-21)
+                            '&text=${Uri.encodeComponent(address)}' // marker matni
+                            );
+
+                        if (await canLaunchUrl(yandexUrl)) {
+                          await launchUrl(yandexUrl);
+                        } else {
+                          toastification.show(
+                            context: context,
+                            title: const Text("Yandex Map topilmadi"),
+                            type: ToastificationType.error,
+                            autoCloseDuration: const Duration(seconds: 3),
+                            showProgressBar: false,
+                            closeButtonShowType: CloseButtonShowType.none,
+                          );
+                        }
+                      },
                       child: Row(
                         children: [
                           const Icon(

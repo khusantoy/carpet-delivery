@@ -14,6 +14,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<GetReadyOrdersEvent>(_onGetReadyOrders);
     on<GetDeliveringOrdersEvent>(_onGetDeliveringOrders);
     on<GetDeliveredOrdersEvent>(_onGetDeliveredOrders);
+    on<ChangeStatusOrdersEvent>(_onChangeStatus);
   }
 
   Future<void> _onGetOrders(
@@ -64,10 +65,10 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     }
   }
 
-  Future<void> _onGetReadyOrders(
+  void _onGetReadyOrders(
     GetReadyOrdersEvent event,
     Emitter<OrderState> emit,
-  ) async {
+  ) {
     if (state is LoadedOrderState) {
       try {
         final currentState = state as LoadedOrderState;
@@ -91,10 +92,10 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     }
   }
 
-  Future<void> _onGetDeliveringOrders(
+  void _onGetDeliveringOrders(
     GetDeliveringOrdersEvent event,
     Emitter<OrderState> emit,
-  ) async {
+  ) {
     if (state is LoadedOrderState) {
       try {
         final currentState = state as LoadedOrderState;
@@ -118,10 +119,10 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     }
   }
 
-  Future<void> _onGetDeliveredOrders(
+  void _onGetDeliveredOrders(
     GetDeliveredOrdersEvent event,
     Emitter<OrderState> emit,
-  ) async {
+  ) {
     if (state is LoadedOrderState) {
       try {
         final currentState = state as LoadedOrderState;
@@ -139,6 +140,56 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
             y: -1,
           ),
         );
+      } catch (e) {
+        emit(ErrorOrderState(e.toString()));
+      }
+    }
+  }
+
+  void _onChangeStatus(ChangeStatusOrdersEvent event, emit) {
+    if (state is LoadedOrderState) {
+      try {
+        final currentState = state as LoadedOrderState;
+        final allOrders = currentState.allOrders;
+        List<Order> filteredOrders = currentState.filteredOrders;
+
+        final indexInAll =
+            allOrders.indexWhere((order) => order.id == event.orderId);
+        final indexInFiltered =
+            filteredOrders.indexWhere((order) => order.id == event.orderId);
+
+        if (indexInFiltered != -1 && indexInAll != -1) {
+          final orderInAll = allOrders[indexInAll];
+          final orderInFiltered = filteredOrders[indexInFiltered];
+
+          allOrders[indexInAll] = orderInAll.copyWith(status: event.status);
+          filteredOrders[indexInFiltered] =
+              orderInFiltered.copyWith(status: event.status);
+
+          if (currentState.title == 'Yetkazilmagan') {
+            filteredOrders =
+                allOrders.where((order) => order.status == 'READY').toList();
+          } else if (currentState.title == 'Yetkazilmoqda') {
+            filteredOrders = allOrders
+                .where((order) => order.status == 'DELIVERING')
+                .toList();
+          } else if (currentState.title == 'Yetkazilgan') {
+            filteredOrders = allOrders
+                .where((order) => order.status == 'DELIVERED')
+                .toList();
+          }
+
+          emit(
+            LoadedOrderState(
+              allOrders: allOrders,
+              filteredOrders: filteredOrders,
+              title: currentState.title,
+              count: filteredOrders.length,
+              x: currentState.x,
+              y: currentState.y,
+            ),
+          );
+        }
       } catch (e) {
         emit(ErrorOrderState(e.toString()));
       }

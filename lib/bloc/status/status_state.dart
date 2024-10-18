@@ -8,7 +8,9 @@ class LoadingStatusState extends StatusState {}
 
 class LoadedStatusState extends StatusState {
   final bool isSuccess;
-  LoadedStatusState({required this.isSuccess});
+  final String status;
+  final String orderId;
+  LoadedStatusState({required this.isSuccess, required this.status, required this.orderId});
 }
 
 class ErrorStatusState extends StatusState {

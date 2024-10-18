@@ -27,6 +27,7 @@ class OrdersList extends StatelessWidget {
           latitude: order.client.latitude,
           longitude: order.client.longitude,
           address: order.address,
+          url: order.url,
         );
       },
     );

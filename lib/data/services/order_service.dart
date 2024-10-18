@@ -61,10 +61,11 @@ class OrderService {
         double latitude = order['client']['latitude'];
         double longitude = order['client']['longitude'];
 
-        final address =
+        final res =
             await geocoder(latitude: latitude, longitude: longitude);
 
-        order['address'] = address;
+        order['address'] = res['address'];
+        order['url'] = res['url'];
         orders.add(Order.fromJson(order));
       }
 
@@ -113,10 +114,11 @@ class OrderService {
         double latitude = order['client']['latitude'];
         double longitude = order['client']['longitude'];
 
-        final address =
+        final res =
             await geocoder(latitude: latitude, longitude: longitude);
 
-        order['address'] = address;
+        order['address'] = res['address'];
+        order['url'] = res['url'];
         orders.add(Order.fromJson(order));
       }
 
@@ -143,10 +145,6 @@ class OrderService {
           "status": "DELIVERED",
         });
 
-        if (response.statusCode == 500) {
-          return [];
-        }
-
         List<dynamic> orders = response.data['data']['orders'];
         allOrders.addAll(orders);
 
@@ -165,10 +163,11 @@ class OrderService {
         double latitude = order['client']['latitude'];
         double longitude = order['client']['longitude'];
 
-        final address =
+        final res =
             await geocoder(latitude: latitude, longitude: longitude);
 
-        order['address'] = address;
+        order['address'] = res['address'];
+        order['url'] = res['url'];
         orders.add(Order.fromJson(order));
       }
 
@@ -205,7 +204,7 @@ class OrderService {
     }
   }
 
-  Future<String> geocoder({
+  Future<Map<String, dynamic>> geocoder({
     required double latitude,
     required double longitude,
   }) async {
@@ -223,6 +222,9 @@ class OrderService {
       final List addressTwoFutureMember =
           response.data['response']['GeoObjectCollection']['featureMember'];
 
+      final url = response.data['response']['GeoObjectCollection']
+          ['featureMember'][0]['GeoObject']['uri'];
+
       if (addressTwoFutureMember.length > 2) {
         String address2 = addressTwoFutureMember[2]['GeoObject']
             ['metaDataProperty']['GeocoderMetaData']['text'];
@@ -234,10 +236,16 @@ class OrderService {
         Set<String> uniqueList = list3.toSet();
         List<String> res = uniqueList.toList().sublist(1);
 
-        return res.join(",").trim();
+        return {
+          'address': res.join(",").trim(),
+          'url': url,
+        };
       }
 
-      return address1;
+      return {
+        'address': address1,
+        'url': url,
+      };
     } catch (e) {
       print("GEOCODER ERROR => $e");
       rethrow;
