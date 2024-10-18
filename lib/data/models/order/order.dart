@@ -3,14 +3,12 @@ class Order {
   final Client client;
   final String status;
   final String address;
-  final String url;
 
   Order({
     required this.id,
     required this.client,
     required this.status,
     required this.address,
-    required this.url,
   });
 
   Order copyWith({
@@ -25,7 +23,6 @@ class Order {
       client: client ?? this.client,
       status: status ?? this.status,
       address: address ?? this.address,
-      url: url ?? this.url,
     );
   }
 
@@ -35,7 +32,6 @@ class Order {
       client: Client.fromJson(json['client']),
       status: json['status'],
       address: json['address'],
-      url: json['url'],
     );
   }
 
@@ -45,7 +41,6 @@ class Order {
       "client": client.toJson(),
       "status": status,
       "address": address,
-      "url": url,
     };
   }
 }

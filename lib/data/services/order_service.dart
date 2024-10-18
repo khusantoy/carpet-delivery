@@ -61,11 +61,10 @@ class OrderService {
         double latitude = order['client']['latitude'];
         double longitude = order['client']['longitude'];
 
-        final res =
+        final address =
             await geocoder(latitude: latitude, longitude: longitude);
 
-        order['address'] = res['address'];
-        order['url'] = res['url'];
+        order['address'] = address;
         orders.add(Order.fromJson(order));
       }
 
@@ -114,11 +113,10 @@ class OrderService {
         double latitude = order['client']['latitude'];
         double longitude = order['client']['longitude'];
 
-        final res =
+        final address =
             await geocoder(latitude: latitude, longitude: longitude);
 
-        order['address'] = res['address'];
-        order['url'] = res['url'];
+        order['address'] = address;
         orders.add(Order.fromJson(order));
       }
 
@@ -163,11 +161,10 @@ class OrderService {
         double latitude = order['client']['latitude'];
         double longitude = order['client']['longitude'];
 
-        final res =
+        final address =
             await geocoder(latitude: latitude, longitude: longitude);
 
-        order['address'] = res['address'];
-        order['url'] = res['url'];
+        order['address'] = address;
         orders.add(Order.fromJson(order));
       }
 
@@ -204,7 +201,7 @@ class OrderService {
     }
   }
 
-  Future<Map<String, dynamic>> geocoder({
+  Future<String> geocoder({
     required double latitude,
     required double longitude,
   }) async {
@@ -222,9 +219,6 @@ class OrderService {
       final List addressTwoFutureMember =
           response.data['response']['GeoObjectCollection']['featureMember'];
 
-      final url = response.data['response']['GeoObjectCollection']
-          ['featureMember'][0]['GeoObject']['uri'];
-
       if (addressTwoFutureMember.length > 2) {
         String address2 = addressTwoFutureMember[2]['GeoObject']
             ['metaDataProperty']['GeocoderMetaData']['text'];
@@ -236,16 +230,10 @@ class OrderService {
         Set<String> uniqueList = list3.toSet();
         List<String> res = uniqueList.toList().sublist(1);
 
-        return {
-          'address': res.join(",").trim(),
-          'url': url,
-        };
+        return res.join(",").trim();
       }
 
-      return {
-        'address': address1,
-        'url': url,
-      };
+      return address1;
     } catch (e) {
       print("GEOCODER ERROR => $e");
       rethrow;
