@@ -3,7 +3,6 @@ import 'package:carpet_delivery/bloc/order/order_bloc.dart';
 import 'package:carpet_delivery/bloc/status/status_bloc.dart';
 import 'package:carpet_delivery/bloc/user_profile/user_bloc.dart';
 import 'package:carpet_delivery/core/dependency/di.dart';
-import 'package:carpet_delivery/data/repositories/auth_repository.dart';
 import 'package:carpet_delivery/data/repositories/order_repository.dart';
 import 'package:carpet_delivery/data/repositories/user_repository.dart';
 import 'package:carpet_delivery/presentation/screens/auth/login_screen.dart';
@@ -35,10 +34,8 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(
-            create: (context) => AuthBloc(
-              authRepository: getIt.get<AuthRepository>(),
-            ),
+         BlocProvider(
+            create: (context) => getIt.get<AuthBloc>(),
           ),
           BlocProvider(
             create: (context) => UserBloc(

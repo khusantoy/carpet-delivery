@@ -1,4 +1,6 @@
+import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
 import 'package:carpet_delivery/core/dependency/di.dart';
+import 'package:carpet_delivery/data/services/auth_api_service.dart';
 import 'package:carpet_delivery/data/services/auth_local_service.dart';
 import 'package:dio/dio.dart';
 
@@ -15,11 +17,11 @@ class DioClient {
 }
 
 class NetworkInterceptor extends Interceptor {
+  final authLocalService = getIt.get<AuthLocalService>();
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     try {
-      final authLocalService = getIt.get<AuthLocalService>();
-      final token = authLocalService.getRefreshToken();
+      final token = authLocalService.getAccessToken();
       if (token != null && token.isNotEmpty) {
         options.headers['Authorization'] = "Bearer $token";
       }
@@ -32,5 +34,20 @@ class NetworkInterceptor extends Interceptor {
         ),
       );
     }
+  }
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
+    if (err.response!.statusCode == 401) {
+      if (authLocalService.containsKey(key: 'refresh_token')) {
+        final authApiService = getIt.get<AuthApiService>();
+        authApiService.refreshToken();
+        return handler.resolve(await authApiService.retry(err.requestOptions));
+      } else {
+        final authBloc = getIt.get<AuthBloc>();
+        authBloc.add(LogoutAuthEvent());
+      }
+    }
+    super.onError(err, handler);
   }
 }
