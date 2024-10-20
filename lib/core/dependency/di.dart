@@ -1,3 +1,4 @@
+import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
 import 'package:carpet_delivery/core/network/dio_client.dart';
 import 'package:carpet_delivery/core/network/dio_network.dart';
 import 'package:carpet_delivery/data/repositories/auth_repository.dart';
@@ -41,6 +42,13 @@ Future<void> dependencyInit() async {
   getIt.registerSingleton(
     OrderRepository(
       orderService: getIt.get<OrderService>(),
+    ),
+  );
+
+  // Blocs
+  getIt.registerLazySingleton(
+    () => AuthBloc(
+      authRepository: getIt.get<AuthRepository>(),
     ),
   );
 }

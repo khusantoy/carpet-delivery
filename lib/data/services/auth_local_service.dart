@@ -31,4 +31,8 @@ class AuthLocalService {
   Future<void> deleteRefreshToken() async {
     await preferance.remove(refreshToken);
   }
+
+  bool containsKey({required String key}) {
+    return preferance.containsKey(key);
+  }
 }

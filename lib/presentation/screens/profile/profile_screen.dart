@@ -4,6 +4,7 @@ import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -13,6 +14,23 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  String version = '';
+
+  Future<String> getVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    String version = packageInfo.version;
+    return version;
+  }
+
+  @override
+  void initState() {
+    getVersion().then((value) {
+      version = value;
+    });
+    super.initState();
+  }
+
   void _logout() {
     showDialog(
       context: context,
@@ -179,7 +197,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: const Text("Chiqish"),
                     ),
                   ),
-                )
+                ),
+                const Spacer(),
+                Text(
+                  "Versiya: $version",
+                  style: const TextStyle(
+                    color: AppColors.locationColor,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(
+                  height: 8.h,
+                ),
               ],
             );
           }
