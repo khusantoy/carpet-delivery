@@ -41,7 +41,7 @@ class AuthApiService {
       });
 
       if (response.statusCode == 200) {
-        authLocalService.saveAccessToken(AuthResponse(
+        await authLocalService.saveAccessToken(AuthResponse(
           token: response.data['access_token'],
           refreshToken: refreshToken!,
         ));

@@ -43,8 +43,8 @@ class NetworkInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response!.statusCode == 401) {
       if (authLocalService.containsKey(key: 'refresh_token')) {
-        final authApiService = getIt.get<AuthApiService>();
-        authApiService.refreshToken();
+        final authApiService =  getIt.get<AuthApiService>();
+        await authApiService.refreshToken();
         final resolve = await authApiService.retry(err.requestOptions);
         return handler.resolve(resolve);
       } else {

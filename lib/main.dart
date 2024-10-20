@@ -3,6 +3,7 @@ import 'package:carpet_delivery/bloc/order/order_bloc.dart';
 import 'package:carpet_delivery/bloc/status/status_bloc.dart';
 import 'package:carpet_delivery/bloc/user_profile/user_bloc.dart';
 import 'package:carpet_delivery/core/dependency/di.dart';
+import 'package:carpet_delivery/core/network/my_internet_checker.dart';
 import 'package:carpet_delivery/data/repositories/order_repository.dart';
 import 'package:carpet_delivery/data/repositories/user_repository.dart';
 import 'package:carpet_delivery/presentation/screens/auth/login_screen.dart';
@@ -13,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:lottie/lottie.dart';
 import 'package:toastification/toastification.dart';
 
 void main() async {
@@ -34,7 +37,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       child: MultiBlocProvider(
         providers: [
-         BlocProvider(
+          BlocProvider(
             create: (context) => getIt.get<AuthBloc>(),
           ),
           BlocProvider(
@@ -64,26 +67,43 @@ class MyApp extends StatelessWidget {
                 foregroundColor: AppColors.white,
               ),
             ),
-            home: BlocBuilder<AuthBloc, AuthState>(
-              buildWhen: (previous, current) {
-                return current is! ErrorAuthState && current is! LoadingAuthState;
-              },
-              builder: (context, state) {
-                if (state is InitialAuthState) {
-                  return const SplashScreen();
+            home: StreamBuilder<InternetConnectionStatus>(
+              stream: MyInternetChecker.observeInternetConnection(),
+              builder: (context, snapshot) {
+                if (snapshot.data == InternetConnectionStatus.disconnected) {
+                  return Scaffold(
+                    backgroundColor: AppColors.customBlack,
+                    body: SafeArea(
+                      child: Center(
+                        child: Lottie.asset("assets/cat.json"),
+                      ),
+                    ),
+                  );
+                } else {
+                  return BlocBuilder<AuthBloc, AuthState>(
+                    buildWhen: (previous, current) {
+                      return current is! ErrorAuthState &&
+                          current is! LoadingAuthState;
+                    },
+                    builder: (context, state) {
+                      if (state is InitialAuthState) {
+                        return const SplashScreen();
+                      }
+                      if (state is UnauthorizedAuthState) {
+                        return const LoginScreen();
+                      }
+                      if (state is AuthorizedAuthState) {
+                        return const MainScreen();
+                      }
+
+                      return const Scaffold(
+                        body: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    },
+                  );
                 }
-                if (state is UnauthorizedAuthState) {
-                  return const LoginScreen();
-                }
-                if (state is AuthorizedAuthState) {
-                  return const MainScreen();
-                }
-          
-                return const Scaffold(
-                  body: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
               },
             ),
           ),
