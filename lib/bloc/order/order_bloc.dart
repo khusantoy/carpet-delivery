@@ -7,6 +7,7 @@ part 'order_state.dart';
 
 class OrderBloc extends Bloc<OrderEvent, OrderState> {
   final OrderRepository orderRepository;
+  OrderEvent? lastEvent;
 
   OrderBloc({required this.orderRepository}) : super(InitialOrderState()) {
     on<GetOrdersEvent>(_onGetOrders);
@@ -15,13 +16,15 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<GetDeliveringOrdersEvent>(_onGetDeliveringOrders);
     on<GetDeliveredOrdersEvent>(_onGetDeliveredOrders);
     on<ChangeStatusOrdersEvent>(_onChangeStatus);
+    on<RefreshOrdersEvent>(_onRefresh);
   }
 
   Future<void> _onGetOrders(
     GetOrdersEvent event,
     Emitter<OrderState> emit,
   ) async {
-    emit(LoadingOrderState());
+    lastEvent = event;
+    emit(LoadingOrderState(lastTitle: null, x: null, y: null));
     try {
       final orders = await orderRepository.getAllOrder();
 
@@ -40,10 +43,72 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     }
   }
 
+  Future<void> _onRefresh(RefreshOrdersEvent event, emit) async {
+    emit(LoadingOrderState(lastTitle: event.lastTitle, x: event.x, y: event.y));
+    try {
+      final orders = await orderRepository.getAllOrder();
+
+      if (lastEvent is GetAllOrdersEvent) {
+        emit(
+          LoadedOrderState(
+            allOrders: orders,
+            filteredOrders: orders,
+            title: "Barchasi",
+            count: orders.length,
+            x: 1.4,
+            y: -1,
+          ),
+        );
+      } else if (lastEvent is GetReadyOrdersEvent) {
+        final filteredOrdes =
+            orders.where((order) => order.status == 'READY').toList();
+        emit(
+          LoadedOrderState(
+            allOrders: orders,
+            filteredOrders: filteredOrdes,
+            count: filteredOrdes.length,
+            title: "Yetkazilmagan",
+            x: 1.2,
+            y: -1,
+          ),
+        );
+      } else if (lastEvent is GetDeliveringOrdersEvent) {
+        final filteredOrdes =
+            orders.where((order) => order.status == 'DELIVERING').toList();
+        emit(
+          LoadedOrderState(
+            allOrders: orders,
+            filteredOrders: filteredOrdes,
+            count: filteredOrdes.length,
+            title: "Yetkazilmoqda",
+            x: 1.2,
+            y: -1,
+          ),
+        );
+      } else if (lastEvent is GetDeliveredOrdersEvent) {
+        final filteredOrdes =
+            orders.where((order) => order.status == 'DELIVERED').toList();
+        emit(
+          LoadedOrderState(
+            allOrders: orders,
+            filteredOrders: filteredOrdes,
+            count: filteredOrdes.length,
+            title: "Yetkazilgan",
+            x: 1.3,
+            y: -1,
+          ),
+        );
+      }
+    } catch (e) {
+      emit(ErrorOrderState(e.toString()));
+    }
+  }
+
   void _onGetAllOrders(
     GetAllOrdersEvent event,
     Emitter<OrderState> emit,
   ) {
+    lastEvent = event;
     if (state is LoadedOrderState) {
       try {
         final currentState = state as LoadedOrderState;
@@ -69,6 +134,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     GetReadyOrdersEvent event,
     Emitter<OrderState> emit,
   ) {
+    lastEvent = event;
     if (state is LoadedOrderState) {
       try {
         final currentState = state as LoadedOrderState;
@@ -96,6 +162,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     GetDeliveringOrdersEvent event,
     Emitter<OrderState> emit,
   ) {
+    lastEvent = event;
     if (state is LoadedOrderState) {
       try {
         final currentState = state as LoadedOrderState;
@@ -123,6 +190,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     GetDeliveredOrdersEvent event,
     Emitter<OrderState> emit,
   ) {
+    lastEvent = event;
     if (state is LoadedOrderState) {
       try {
         final currentState = state as LoadedOrderState;

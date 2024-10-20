@@ -18,3 +18,11 @@ class ChangeStatusOrdersEvent extends OrderEvent {
 
   ChangeStatusOrdersEvent({required this.status, required this.orderId});
 }
+
+class RefreshOrdersEvent extends OrderEvent {
+  final String lastTitle;
+  final double x;
+  final double y;
+
+  RefreshOrdersEvent({required this.lastTitle, required this.x, required this.y});
+}

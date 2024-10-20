@@ -4,7 +4,13 @@ sealed class OrderState {}
 
 class InitialOrderState extends OrderState {}
 
-class LoadingOrderState extends OrderState {}
+class LoadingOrderState extends OrderState {
+  final String? lastTitle;
+  final double? x;
+  final double? y;
+
+  LoadingOrderState({required this.lastTitle, required this.x, required this.y});
+}
 
 class LoadedOrderState extends OrderState {
   List<Order> allOrders;
