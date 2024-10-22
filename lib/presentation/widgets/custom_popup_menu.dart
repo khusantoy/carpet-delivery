@@ -1,5 +1,6 @@
 import 'package:carpet_delivery/bloc/order/order_bloc.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,28 +34,72 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
               context.read<OrderBloc>().add(GetAllOrdersEvent());
             },
             value: FilterItem.all,
-            child: const Text("Barchasi"),
+            child: const Row(
+              children: [
+                Icon(
+                  Icons.all_inclusive,
+                  color: Colors.blue,
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Text("Barchasi"),
+              ],
+            ),
           ),
           PopupMenuItem(
             onTap: () {
               context.read<OrderBloc>().add(GetReadyOrdersEvent());
             },
             value: FilterItem.pending,
-            child: const Text("Yetkazilmagan"),
+            child: const Row(
+              children: [
+                Icon(
+                  CupertinoIcons.xmark_circle,
+                  color: AppColors.readyColor,
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Text("Yetkazilmagan"),
+              ],
+            ),
           ),
           PopupMenuItem(
             onTap: () {
               context.read<OrderBloc>().add(GetDeliveringOrdersEvent());
             },
             value: FilterItem.progress,
-            child: const Text("Yetkazilmoqda"),
+            child: const Row(
+              children: [
+                Icon(
+                  CupertinoIcons.location,
+                  color: AppColors.deliveringColor,
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Text("Yetkazilmoqda"),
+              ],
+            ),
           ),
           PopupMenuItem(
             onTap: () {
               context.read<OrderBloc>().add(GetDeliveredOrdersEvent());
             },
             value: FilterItem.completed,
-            child: const Text("Yetkazilgan"),
+            child: const Row(
+              children: [
+                Icon(
+                  CupertinoIcons.check_mark_circled,
+                  color: AppColors.deliveredColor,
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Text("Yetkazilgan"),
+              ],
+            ),
           )
         ];
       },

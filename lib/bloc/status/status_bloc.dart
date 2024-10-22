@@ -11,7 +11,7 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
   }
 
   Future<void> _onChangeStatus(ChangeStatusEvent event, emit) async {
-    emit(LoadingStatusState());
+    emit(LoadingStatusState(orderId: event.orderId));
     try {
       final response = await orderRepository.changeOrderStatus(
         orderId: event.orderId,

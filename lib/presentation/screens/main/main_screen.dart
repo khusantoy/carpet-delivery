@@ -1,4 +1,5 @@
 import 'package:carpet_delivery/presentation/screens/delivery/deliveries_screen.dart';
+import 'package:carpet_delivery/presentation/screens/map/map_screen.dart';
 import 'package:carpet_delivery/presentation/screens/profile/profile_screen.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class _MainScreenState extends State<MainScreen> {
         index: currentIndex,
         children: const [
           DeliveriesScreen(),
+          MapScreen(),
           ProfileScreen(),
         ],
       ),
@@ -52,6 +54,14 @@ class _MainScreenState extends State<MainScreen> {
                 color: Colors.grey,
               ),
               label: 'Yetkazma',
+            ),
+             NavigationDestination(
+              selectedIcon: Icon(Icons.map),
+              icon: Icon(
+                Icons.map,
+                color: Colors.grey,
+              ),
+              label: 'Xarita',
             ),
             NavigationDestination(
               selectedIcon: Icon(Icons.person),
