@@ -1,10 +1,11 @@
-import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
-import 'package:carpet_delivery/bloc/order/order_bloc.dart';
-import 'package:carpet_delivery/bloc/status/status_bloc.dart';
-import 'package:carpet_delivery/bloc/user_profile/user_bloc.dart';
+import 'package:carpet_delivery/logic/bloc/auth/auth_bloc.dart';
+import 'package:carpet_delivery/logic/bloc/map/map_bloc.dart';
+import 'package:carpet_delivery/logic/bloc/order/order_bloc.dart';
+import 'package:carpet_delivery/logic/bloc/status/status_bloc.dart';
+import 'package:carpet_delivery/logic/bloc/user_profile/user_bloc.dart';
 import 'package:carpet_delivery/core/dependency/di.dart';
 import 'package:carpet_delivery/core/network/my_internet_checker.dart';
-import 'package:carpet_delivery/cubit/theme/theme_cubit.dart';
+import 'package:carpet_delivery/logic/cubit/theme/theme_cubit.dart';
 import 'package:carpet_delivery/data/repositories/order_repository.dart';
 import 'package:carpet_delivery/data/repositories/user_repository.dart';
 import 'package:carpet_delivery/presentation/screens/auth/login_screen.dart';
@@ -60,6 +61,11 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => ThemeCubit(getIt.get<SharedPreferences>()),
+          ),
+          BlocProvider(
+            create: (context) => MapBloc(
+              getIt.get<OrderRepository>(),
+            ),
           )
         ],
         child: BlocBuilder<ThemeCubit, ThemeState>(

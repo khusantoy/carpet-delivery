@@ -43,7 +43,7 @@ dependencies:
   equatable: ^2.0.5
   shared_preferences: ^2.3.2
   dio: ^5.7.0
-  get_it: ^8.0.0
+  get_it: ^8.0.2
   flutter_dotenv: ^5.2.1
   shimmer: ^3.0.0
   toastification: ^2.3.0

@@ -5,11 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class UniversalButtonWidget extends StatelessWidget {
   final VoidCallback function;
   final Widget child;
+  final bool isEnabled;
 
   const UniversalButtonWidget({
     super.key,
     required this.function,
     required this.child,
+    this.isEnabled = false,
   });
   @override
   Widget build(BuildContext context) {
@@ -18,13 +20,14 @@ class UniversalButtonWidget extends StatelessWidget {
       height: 48.h,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.customBlack,
+          backgroundColor:
+              isEnabled ? AppColors.customBlack : AppColors.disabledBlack,
           foregroundColor: AppColors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
         ),
-        onPressed: function,
+        onPressed: isEnabled ? function : null,
         child: child,
       ),
     );

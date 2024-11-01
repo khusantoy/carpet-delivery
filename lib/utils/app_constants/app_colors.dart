@@ -11,6 +11,7 @@ class AppColors {
   static const Color readyColor = Color(0xFFF33D3D);
   static const Color readyColorAccent = Color(0xFFFFF1F1);
   static const Color customBlack = Color(0xFF21252C);
+  static const Color disabledBlack = Color(0xFF6B7075);
   static const Color bottomNavigationLabelColor = Color(0xFF76889A);
   static const Color locationColor = Color(0xFF76889A);
   static const Color textGrey = Color(0xFF808080);

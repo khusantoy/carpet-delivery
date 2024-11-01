@@ -1,4 +1,4 @@
-import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
+import 'package:carpet_delivery/logic/bloc/auth/auth_bloc.dart';
 import 'package:carpet_delivery/data/models/auth/login_request.dart';
 import 'package:carpet_delivery/presentation/widgets/custom_textfield.dart';
 import 'package:carpet_delivery/presentation/widgets/universal_button_widget.dart';
@@ -20,6 +20,31 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   final formkey = GlobalKey<FormState>();
   bool _isObscured = true;
+  bool _isUsernameValid = false;
+  bool _idPasswordValid = false;
+
+  @override
+  void initState() {
+    _usernameController.addListener(_validateInputs);
+    _passwordController.addListener(_validateInputs);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _validateInputs() {
+    setState(() {
+      _isUsernameValid =
+          _usernameController.text.trim().isNotEmpty ? true : false;
+      _idPasswordValid =
+          _passwordController.text.trim().isNotEmpty ? true : false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +55,9 @@ class _LoginScreenState extends State<LoginScreen> {
             SnackBar(
               backgroundColor: AppColors.readyColor,
               content: Center(
-                child: Text(state.message),
+                child: Text(state.message != "Failed to login"
+                    ? state.message
+                    : "Login yoki parol noto'g'ri"),
               ),
             ),
           );
@@ -91,6 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   BlocBuilder<AuthBloc, AuthState>(
                     builder: (context, state) {
                       return UniversalButtonWidget(
+                        isEnabled: _idPasswordValid && _isUsernameValid,
                         function: () {
                           if (formkey.currentState!.validate()) {
                             formkey.currentState!.save();
@@ -104,8 +132,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         child: state is LoadingAuthState
                             ? const Center(
-                                child: CircularProgressIndicator(
-                                  color: AppColors.white,
+                                child: Padding(
+                                  padding: EdgeInsets.all(3.0),
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.white,
+                                  ),
                                 ),
                               )
                             : const Text(

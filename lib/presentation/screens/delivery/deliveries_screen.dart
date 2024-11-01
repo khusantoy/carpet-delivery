@@ -1,5 +1,5 @@
-import 'package:carpet_delivery/bloc/order/order_bloc.dart';
-import 'package:carpet_delivery/bloc/status/status_bloc.dart';
+import 'package:carpet_delivery/logic/bloc/order/order_bloc.dart';
+import 'package:carpet_delivery/logic/bloc/status/status_bloc.dart';
 import 'package:carpet_delivery/presentation/widgets/custom_popup_menu.dart';
 import 'package:carpet_delivery/presentation/widgets/delivery_widget.dart';
 import 'package:carpet_delivery/presentation/widgets/loading_order_shimmer.dart';
