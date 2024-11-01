@@ -30,7 +30,9 @@ class _MapScreenState extends State<MapScreen> {
         }
       } else if (status == ServiceStatus.enabled) {
         if (mounted) {
-          context.read<MapBloc>().add(GetOrderMarkersMapEvent());
+          context
+              .read<MapBloc>()
+              .add(GetOrderMarkersMapEvent(context: context));
         }
       }
     });
@@ -55,7 +57,9 @@ class _MapScreenState extends State<MapScreen> {
                 break;
               case LocationPermission.whileInUse:
               case LocationPermission.always:
-                context.read<MapBloc>().add(GetOrderMarkersMapEvent());
+                context
+                    .read<MapBloc>()
+                    .add(GetOrderMarkersMapEvent(context: context));
                 break;
             }
           }
@@ -91,7 +95,8 @@ class _MapScreenState extends State<MapScreen> {
         ],
       ),
       body: BlocBuilder<MapBloc, MapState>(
-        bloc: context.read<MapBloc>()..add(GetOrderMarkersMapEvent()),
+        bloc: context.read<MapBloc>()
+          ..add(GetOrderMarkersMapEvent(context: context)),
         builder: (context, state) {
           if (state is LoadingMapState) {
             return Center(
