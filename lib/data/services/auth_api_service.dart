@@ -31,7 +31,7 @@ class AuthApiService {
     }
   }
 
-  Future<void> refreshToken() async {
+  Future<bool> refreshToken() async {
     final authLocalService = getIt.get<AuthLocalService>();
     final refreshToken = authLocalService.getRefreshToken();
 
@@ -45,9 +45,11 @@ class AuthApiService {
           token: response.data['access_token'],
           refreshToken: refreshToken!,
         ));
+        return true;
       } else {
         final authBloc = getIt.get<AuthBloc>();
         authBloc.add(LogoutAuthEvent());
+        return false;
       }
     } on DioException catch (e) {
       String errorMessage = '';

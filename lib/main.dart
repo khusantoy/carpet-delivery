@@ -14,6 +14,7 @@ import 'package:carpet_delivery/presentation/screens/splash_screen/splash_screen
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:carpet_delivery/utils/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -71,51 +72,56 @@ class MyApp extends StatelessWidget {
         child: BlocBuilder<ThemeCubit, ThemeState>(
           builder: (context, state) {
             return ToastificationWrapper(
-              child: MaterialApp(
-                title: 'QulayYetkaz',
-                debugShowCheckedModeBanner: false,
-                theme: AppTheme.lightTheme,
-                darkTheme: AppTheme.darkTheme,
-                themeMode: state.isDark ? ThemeMode.dark : ThemeMode.light,
-                home: StreamBuilder<InternetConnectionStatus>(
-                  stream: MyInternetChecker.observeInternetConnection(),
-                  builder: (context, snapshot) {
-                    if (snapshot.data ==
-                        InternetConnectionStatus.disconnected) {
-                      return Scaffold(
-                        backgroundColor: AppColors.customBlack,
-                        body: SafeArea(
-                          child: Center(
-                            child: Lottie.asset("assets/cat.json"),
-                          ),
-                        ),
-                      );
-                    } else {
-                      return BlocBuilder<AuthBloc, AuthState>(
-                        buildWhen: (previous, current) {
-                          return current is! ErrorAuthState &&
-                              current is! LoadingAuthState;
-                        },
-                        builder: (context, state) {
-                          if (state is InitialAuthState) {
-                            return const SplashScreen();
-                          }
-                          if (state is UnauthorizedAuthState) {
-                            return const LoginScreen();
-                          }
-                          if (state is AuthorizedAuthState) {
-                            return const MainScreen();
-                          }
-
-                          return const Scaffold(
-                            body: Center(
-                              child: CircularProgressIndicator(),
+              child: AnnotatedRegion<SystemUiOverlayStyle>(
+                value: const SystemUiOverlayStyle(
+                  systemNavigationBarColor: AppColors.customBlack,
+                ),
+                child: MaterialApp(
+                  title: 'QulayYetkaz',
+                  debugShowCheckedModeBanner: false,
+                  theme: AppTheme.lightTheme,
+                  darkTheme: AppTheme.darkTheme,
+                  themeMode: state.isDark ? ThemeMode.dark : ThemeMode.light,
+                  home: StreamBuilder<InternetConnectionStatus>(
+                    stream: MyInternetChecker.observeInternetConnection(),
+                    builder: (context, snapshot) {
+                      if (snapshot.data ==
+                          InternetConnectionStatus.disconnected) {
+                        return Scaffold(
+                          backgroundColor: AppColors.customBlack,
+                          body: SafeArea(
+                            child: Center(
+                              child: Lottie.asset("assets/cat.json"),
                             ),
-                          );
-                        },
-                      );
-                    }
-                  },
+                          ),
+                        );
+                      } else {
+                        return BlocBuilder<AuthBloc, AuthState>(
+                          buildWhen: (previous, current) {
+                            return current is! ErrorAuthState &&
+                                current is! LoadingAuthState;
+                          },
+                          builder: (context, state) {
+                            if (state is InitialAuthState) {
+                              return const SplashScreen();
+                            }
+                            if (state is UnauthorizedAuthState) {
+                              return const LoginScreen();
+                            }
+                            if (state is AuthorizedAuthState) {
+                              return const MainScreen();
+                            }
+
+                            return const Scaffold(
+                              body: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    },
+                  ),
                 ),
               ),
             );

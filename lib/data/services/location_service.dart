@@ -1,41 +1,49 @@
 import 'package:geolocator/geolocator.dart';
 
 class LocationService {
-  static Future<Map<String, dynamic>> getLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+  static final LocationService _instance = LocationService._internal();
+  factory LocationService() => _instance;
+  LocationService._internal();
 
-    // check location is on
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return {
-        'serviceEnabled': false,
-      };
-    }
+  Position? _lastPosition;
+  DateTime? _lastFetchTime;
 
-    // check location permission
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
+  Future<Map<String, dynamic>> getLocation() async {
+    if (_lastPosition != null && _lastFetchTime != null) {
+      final difference = DateTime.now().difference(_lastFetchTime!);
+      if (difference.inMinutes < 1) {
         return {
-          'permission': false,
+          'serviceEnabled': true,
+          'permission': true,
+          'position': _lastPosition
         };
       }
     }
 
-    if (permission == LocationPermission.deniedForever) {
-      return {
-        'permission': false,
-      };
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return {'serviceEnabled': false};
     }
 
-    print("BU YERGA KELDI");
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return {'permission': false};
+      }
+    }
 
-    return {
-      'serviceEnabled': true,
-      'permission': true,
-      'position': await Geolocator.getCurrentPosition()
-    };
+    if (permission == LocationPermission.deniedForever) {
+      return {'permission': false};
+    }
+
+    final position = await Geolocator.getCurrentPosition();
+    _lastPosition = position;
+    _lastFetchTime = DateTime.now();
+
+    return {'serviceEnabled': true, 'permission': true, 'position': position};
   }
 }

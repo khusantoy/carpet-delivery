@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:collection';
+
 import 'package:carpet_delivery/logic/bloc/auth/auth_bloc.dart';
 import 'package:carpet_delivery/core/dependency/di.dart';
 import 'package:carpet_delivery/data/services/auth_api_service.dart';
@@ -21,6 +24,66 @@ class DioNetwork {
 
 class NetworkInterceptor extends Interceptor {
   final authLocalService = getIt.get<AuthLocalService>();
+  bool _isRefreshing = false;
+  final Queue<Completer> _refreshTokenQueue = Queue();
+
+  Future<void> _queueRequest() async {
+    final completer = Completer();
+    _refreshTokenQueue.add(completer);
+    await completer.future;
+  }
+
+  void _resolveQueue() {
+    for (var completer in _refreshTokenQueue) {
+      completer.complete();
+    }
+    _refreshTokenQueue.clear();
+  }
+
+  @override
+  Future<void> onError(
+      DioException err, ErrorInterceptorHandler handler) async {
+    if (err.response?.statusCode == 401) {
+      try {
+        if (_isRefreshing) {
+          await _queueRequest();
+          final response =
+              await getIt.get<AuthApiService>().retry(err.requestOptions);
+          handler.resolve(response);
+          return;
+        }
+
+        _isRefreshing = true;
+
+        if (authLocalService.containsKey(key: 'refresh_token')) {
+          final authApiService = getIt.get<AuthApiService>();
+          final isRefreshed = await authApiService.refreshToken();
+
+          if (isRefreshed) {
+            _resolveQueue();
+            final response = await authApiService.retry(err.requestOptions);
+            _isRefreshing = false;
+            handler.resolve(response);
+            return;
+          }
+        }
+
+        _isRefreshing = false;
+        final authBloc = getIt.get<AuthBloc>();
+        authBloc.add(LogoutAuthEvent());
+        handler.reject(err);
+        return;
+      } catch (e) {
+        _isRefreshing = false;
+        final authBloc = getIt.get<AuthBloc>();
+        authBloc.add(LogoutAuthEvent());
+        handler.reject(err);
+        return;
+      }
+    }
+    handler.reject(err);
+  }
+
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     try {
@@ -37,21 +100,5 @@ class NetworkInterceptor extends Interceptor {
         ),
       );
     }
-  }
-
-  @override
-  void onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (err.response!.statusCode == 401) {
-      if (authLocalService.containsKey(key: 'refresh_token')) {
-        final authApiService =  getIt.get<AuthApiService>();
-        await authApiService.refreshToken();
-        final resolve = await authApiService.retry(err.requestOptions);
-        return handler.resolve(resolve);
-      } else {
-        final authBloc = getIt.get<AuthBloc>();
-        authBloc.add(LogoutAuthEvent());
-      }
-    }
-    super.onError(err, handler);
   }
 }

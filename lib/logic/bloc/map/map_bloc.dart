@@ -25,8 +25,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     try {
       final orders = await orderRepository.getReadyOrders();
+      final locationService = LocationService();
 
-      final result = await LocationService.getLocation();
+      final result = await locationService.getLocation();
 
       if (result['serviceEnabled'] == false) {
         emit(ServiceDisabledMapState());
