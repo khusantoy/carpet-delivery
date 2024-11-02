@@ -3,10 +3,9 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:carpet_delivery/data/repositories/order_repository.dart';
 import 'package:carpet_delivery/data/services/location_service.dart';
+import 'package:carpet_delivery/presentation/widgets/marker_info.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:toastification/toastification.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 part 'map_event.dart';
@@ -105,66 +104,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
                 backgroundColor: Colors.white,
                 showDragHandle: true,
                 context: event.context,
-                builder: (context) => Container(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListTile(
-                        leading: const Icon(Icons.person),
-                        title: Text(order.client.fullName),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.phone_android),
-                        title: Text(order.client.phoneNumber),
-                        trailing: IconButton.outlined(
-                          onPressed: () {
-                            launchUrl(
-                                Uri.parse('tel:${order.client.phoneNumber}'));
-                          },
-                          icon: const Icon(Icons.phone),
-                        ),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.location_on),
-                        title: Text(order.address),
-                        trailing: IconButton.outlined(
-                          onPressed: () async {
-                            final yandexUrl = Uri.parse(
-                                'yandexmaps://maps.yandex.ru/?'
-                                'pt=${order.client.latitude},${order.client.longitude}' // nuqta koordinatalari
-                                '&z=14' // zoom darajasi (0-21)
-                                '&text=${Uri.encodeComponent(order.address)}' // marker matni
-                                );
-
-                            if (await canLaunchUrl(yandexUrl)) {
-                              await launchUrl(yandexUrl);
-                            } else {
-                              toastification.show(
-                                context: context,
-                                title: const Text("Yandex Map topilmadi"),
-                                type: ToastificationType.error,
-                                autoCloseDuration: const Duration(seconds: 3),
-                                showProgressBar: false,
-                                closeButtonShowType: CloseButtonShowType.none,
-                              );
-                            }
-                          },
-                          icon: const Icon(Icons.navigation_rounded),
-                        ),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.near_me),
-                        title: Text(
-                          '${distance.toStringAsFixed(2)} km',
-                        ),
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.timer),
-                        title: Text("$duration daqiqa"),
-                      ),
-                    ],
-                  ),
+                builder: (context) => MarkerInfo(
+                  order: order,
+                  distance: distance,
+                  duration: duration,
                 ),
               );
             },

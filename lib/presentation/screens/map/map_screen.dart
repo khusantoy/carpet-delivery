@@ -89,7 +89,45 @@ class _MapScreenState extends State<MapScreen> {
         title: const Text("Xarita"),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              context.read<MapBloc>().add(
+                    GetOrderMarkersMapEvent(context: context),
+                  );
+            },
+            icon: const Icon(Icons.refresh),
+          ),
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    backgroundColor: Colors.white,
+                    title: const Text(
+                      "Ma'lumot",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    content: const Text(
+                      "Xarita orqali faqat yetkazilmagan mahsulotlarni ko'rishingiz mumkin",
+                    ),
+                    actions: [
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.customBlack,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Yopish"),
+                      )
+                    ],
+                  );
+                },
+              );
+            },
             icon: const Icon(Icons.info),
           ),
         ],

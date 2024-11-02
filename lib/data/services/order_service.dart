@@ -62,7 +62,7 @@ class OrderService {
         double longitude = order['client']['longitude'];
 
         final address =
-            await geocoder(latitude: latitude, longitude: longitude);
+            await geocoder(latitude: longitude, longitude: latitude);
 
         order['address'] = address;
         orders.add(Order.fromJson(order));
@@ -114,7 +114,7 @@ class OrderService {
         double longitude = order['client']['longitude'];
 
         final address =
-            await geocoder(latitude: latitude, longitude: longitude);
+            await geocoder(latitude: longitude, longitude: latitude);
 
         order['address'] = address;
         orders.add(Order.fromJson(order));
@@ -162,7 +162,7 @@ class OrderService {
         double longitude = order['client']['longitude'];
 
         final address =
-            await geocoder(latitude: latitude, longitude: longitude);
+            await geocoder(latitude: longitude, longitude: latitude);
 
         order['address'] = address;
         orders.add(Order.fromJson(order));

@@ -139,6 +139,23 @@ class ProductInfoWidget extends StatelessWidget {
                           ),
                         ),
                         PopupMenuItem(
+                          onTap: () async {
+                            launchUrl(Uri.parse('tel:$phoneNumber'));
+                          },
+                          child: Row(
+                            children: [
+                              const Icon(
+                                CupertinoIcons.phone,
+                                color: Colors.blue,
+                              ),
+                              SizedBox(
+                                width: 6.w,
+                              ),
+                              const Text("Bog'lanish")
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
                           onTap: () {
                             context.read<StatusBloc>().add(
                                   ChangeStatusEvent(
