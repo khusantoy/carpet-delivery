@@ -134,7 +134,9 @@ class _MapScreenState extends State<MapScreen> {
       ),
       body: BlocBuilder<MapBloc, MapState>(
         bloc: context.read<MapBloc>()
-          ..add(GetOrderMarkersMapEvent(context: context)),
+          ..add(
+            GetOrderMarkersMapEvent(context: context),
+          ),
         builder: (context, state) {
           if (state is LoadingMapState) {
             return Center(

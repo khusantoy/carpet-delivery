@@ -9,8 +9,13 @@ class LoadingMapState extends MapState {}
 class LoadedMapState extends MapState {
   List<PlacemarkMapObject> markers;
   Point point;
+  final String? activeOrderId; 
 
-  LoadedMapState({required this.markers, required this.point});
+  LoadedMapState({
+    required this.markers,
+    required this.point,
+    this.activeOrderId,
+  });
 }
 
 class ErrorMapState extends MapState {

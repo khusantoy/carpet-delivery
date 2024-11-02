@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bloc/bloc.dart';
+import 'package:carpet_delivery/data/models/order/order.dart';
 import 'package:carpet_delivery/data/repositories/order_repository.dart';
 import 'package:carpet_delivery/data/services/location_service.dart';
 import 'package:carpet_delivery/presentation/widgets/marker_info.dart';
@@ -13,10 +14,45 @@ part 'map_state.dart';
 
 class MapBloc extends Bloc<MapEvent, MapState> {
   OrderRepository orderRepository;
+  late List<Order> orders;
   MapBloc(this.orderRepository) : super(InitialMapState()) {
     on<GetOrderMarkersMapEvent>(_getOrderMarkers);
     on<ServiceDisabledMapEvent>(_onServiceDisabled);
     on<LocationPermissionDeniedMapEvent>(_onPermissionDenied);
+    on<SetActiveOrderMapEvent>(_setActiveOrder);
+  }
+
+  Future<void> _setActiveOrder(
+      SetActiveOrderMapEvent event, Emitter<MapState> emit) async {
+    if (state is LoadedMapState) {
+      final currentState = state as LoadedMapState;
+
+      if (event.orderId != currentState.activeOrderId) {
+        // orders hali yo'q bo'lsa, qayta yuklash
+        if (orders.isEmpty) {
+          orders = await orderRepository.getReadyOrders();
+        }
+
+        final order = orders.firstWhere((o) => o.id == event.orderId);
+
+        showModalBottomSheet(
+          backgroundColor: Colors.white,
+          showDragHandle: true,
+          context: event.context,
+          builder: (context) => MarkerInfo(
+            order: order,
+            distance: event.distance,
+            duration: event.duration,
+          ),
+        );
+
+        emit(LoadedMapState(
+          markers: currentState.markers,
+          point: currentState.point,
+          activeOrderId: event.orderId,
+        ));
+      }
+    }
   }
 
   void _getOrderMarkers(GetOrderMarkersMapEvent event, emit) async {
@@ -100,22 +136,22 @@ class MapBloc extends Bloc<MapEvent, MapState> {
               ),
             ),
             onTap: (mapObject, point) {
-              showModalBottomSheet(
-                backgroundColor: Colors.white,
-                showDragHandle: true,
+              add(SetActiveOrderMapEvent(
+                orderId: order.id,
                 context: event.context,
-                builder: (context) => MarkerInfo(
-                  order: order,
-                  distance: distance,
-                  duration: duration,
-                ),
-              );
+                distance: distance,
+                duration: duration,
+              ));
             },
           ),
         );
       }
 
-      emit(LoadedMapState(markers: markers, point: myPoint));
+      emit(LoadedMapState(
+        markers: markers,
+        point: myPoint,
+        activeOrderId: null,
+      ));
     } catch (e) {
       ErrorMapState(message: e.toString());
     }

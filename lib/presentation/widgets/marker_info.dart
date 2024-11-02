@@ -127,7 +127,7 @@ class _MarkerInfoState extends State<MarkerInfo> {
             ),
             child: ListTile(
               leading: const Icon(Icons.timer),
-              title: Text("${widget.duration} daqiqa"),
+              title: Text("~ ${widget.duration} daqiqa"),
             ),
           ),
         ],
