@@ -31,54 +31,94 @@ class AuthApiService {
     }
   }
 
-  Future<bool> refreshToken() async {
+  Future<int?> refreshToken() async {
     final authLocalService = getIt.get<AuthLocalService>();
     final refreshToken = authLocalService.getRefreshToken();
 
+    // Refresh token null bo'lishi mumkin
+    if (refreshToken == null) {
+      final authBloc = getIt.get<AuthBloc>();
+      authBloc.add(LogoutAuthEvent());
+      return null;
+    }
+
     try {
-      final response = await _dio.post("/refresh-token", data: {
-        "refresh_token": refreshToken,
-      });
+      final response = await _dio.post(
+        "/refresh-token",
+        data: {
+          "refresh_token": refreshToken,
+        },
+        // Timeout qo'shamiz
+        options: Options(
+          sendTimeout: const Duration(seconds: 10),
+          receiveTimeout: const Duration(seconds: 10),
+        ),
+      );
+
+      // Response data null bo'lishi mumkin
+      if (response.data == null || response.data['access_token'] == null) {
+        throw DioException(
+          requestOptions: response.requestOptions,
+          error: 'Invalid response format',
+        );
+      }
 
       if (response.statusCode == 200) {
-        await authLocalService.saveAccessToken(AuthResponse(
-          token: response.data['access_token'],
-          refreshToken: refreshToken!,
-        ));
-        return true;
+        await authLocalService.saveAccessToken(
+          AuthResponse(
+            token: response.data['access_token'],
+            refreshToken: refreshToken,
+          ),
+        );
+        return response.statusCode;
       } else {
+        // Status code 200 bo'lmasa
         final authBloc = getIt.get<AuthBloc>();
         authBloc.add(LogoutAuthEvent());
-        return false;
+        return response.statusCode;
       }
     } on DioException catch (e) {
-      String errorMessage = '';
-
-      if (e.response != null) {
-        errorMessage =
-            e.response?.data['message'] ?? 'An unknown error occurred';
-        print("Refresh token Dio Error: $errorMessage");
-      } else {
-        print("Refresh token Dio Error: ${e.message}");
+      // 401 holatini alohida handle qilamiz
+      if (e.response?.statusCode == 401) {
+        final authBloc = getIt.get<AuthBloc>();
+        authBloc.add(LogoutAuthEvent());
+        return e.response?.statusCode;
       }
-      throw (errorMessage);
+
+      String errorMessage = e.response?.data?['message'] ??
+          e.message ??
+          'An unknown error occurred';
+
+      throw errorMessage;
     } catch (e) {
-      print("Refresh token Error: $e");
-      rethrow;
+      throw 'Failed to refresh token: $e';
     }
   }
 
   Future<Response<dynamic>> retry(RequestOptions requestOptions) async {
-    final options = Options(
-      method: requestOptions.method,
-      headers: requestOptions.headers,
-    );
+    try {
+      final options = Options(
+        method: requestOptions.method,
+        headers: requestOptions.headers,
+        // Qo'shimcha muhim parametrlarni saqlaymiz
+        sendTimeout: requestOptions.sendTimeout,
+        receiveTimeout: requestOptions.receiveTimeout,
+        contentType: requestOptions.contentType,
+        responseType: requestOptions.responseType,
+        validateStatus: requestOptions.validateStatus,
+      );
 
-    return await _dio.request(
-      requestOptions.path,
-      data: requestOptions.data,
-      queryParameters: requestOptions.queryParameters,
-      options: options,
-    );
+      return await _dio.request<dynamic>(
+        requestOptions.path,
+        data: requestOptions.data,
+        queryParameters: requestOptions.queryParameters,
+        options: options,
+      );
+    } catch (e) {
+      throw DioException(
+        requestOptions: requestOptions,
+        error: 'Failed to retry request: $e',
+      );
+    }
   }
 }

@@ -44,7 +44,6 @@ class _MapScreenState extends State<MapScreen> {
       if (mounted) {
         final currentPermission = await Geolocator.checkPermission();
 
-        // Faqat permission o'zgargan bo'lsagina event yuboramiz
         if (_lastPermissionStatus != currentPermission) {
           _lastPermissionStatus = currentPermission;
 
