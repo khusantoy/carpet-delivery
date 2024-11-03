@@ -1,4 +1,4 @@
-import 'package:carpet_delivery/logic/bloc/status/status_bloc.dart';
+import 'package:carpet_delivery/bloc/status/status_bloc.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

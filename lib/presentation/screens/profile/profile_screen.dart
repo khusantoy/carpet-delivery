@@ -1,6 +1,5 @@
-import 'package:carpet_delivery/logic/bloc/auth/auth_bloc.dart';
-import 'package:carpet_delivery/logic/bloc/user_profile/user_bloc.dart';
-import 'package:carpet_delivery/logic/cubit/theme/theme_cubit.dart';
+import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
+import 'package:carpet_delivery/bloc/user_profile/user_bloc.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -79,16 +78,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: AppColors.white,
       appBar: AppBar(
         title: const Text("Profil"),
-        actions: [
-          IconButton(
-            onPressed: () {
-              context.read<ThemeCubit>().toggleTheme();
-            },
-            icon: Icon(context.watch<ThemeCubit>().isDark
-                ? Icons.dark_mode
-                : Icons.light_mode),
-          ),
-        ],
       ),
       body: BlocBuilder<UserBloc, UserState>(
         bloc: context.read<UserBloc>()..add(FetchUserProfileEvent()),

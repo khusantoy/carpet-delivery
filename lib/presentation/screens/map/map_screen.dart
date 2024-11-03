@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:carpet_delivery/logic/bloc/map/map_bloc.dart';
+import 'package:carpet_delivery/bloc/map/map_bloc.dart';
 import 'package:carpet_delivery/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,4 +1,4 @@
-import 'package:carpet_delivery/logic/bloc/auth/auth_bloc.dart';
+import 'package:carpet_delivery/bloc/auth/auth_bloc.dart';
 import 'package:carpet_delivery/core/dependency/di.dart';
 import 'package:carpet_delivery/core/network/dio_client.dart';
 import 'package:carpet_delivery/data/models/auth/auth_response.dart';
